@@ -4,7 +4,7 @@
 	<title>宠主助手-dev</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
-	<link rel="stylesheet" href="/Public/stylesheets/weui.min.css">
+	<link rel="stylesheet" href="/Public/stylesheets/weui.min.css?v=1">
 	<link rel="stylesheet" href="/Public/stylesheets/common.css?t=<?php echo time();?>">
 	<script type="text/javascript" src="/Public/javascripts/weui.min.js"></script>
 	<script type="text/javascript" src="/Public/javascripts/zepto.min.js"></script>
@@ -124,6 +124,12 @@
 	}
 	.pcd_table tr{
 		position: relative;
+	}
+	.pcds_page .weui-cells{
+		background-color: #efeff3;
+	}
+	.pcds_page .weui-cell{
+		background-color: #fff;
 	}
 </style>
 

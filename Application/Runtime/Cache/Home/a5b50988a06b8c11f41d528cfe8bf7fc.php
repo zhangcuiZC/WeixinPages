@@ -4,7 +4,7 @@
 	<title>宠主助手-dev</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
-	<link rel="stylesheet" href="/Public/stylesheets/weui.min.css">
+	<link rel="stylesheet" href="/Public/stylesheets/weui.min.css?v=1">
 	<link rel="stylesheet" href="/Public/stylesheets/common.css?t=<?php echo time();?>">
 	<script type="text/javascript" src="/Public/javascripts/weui.min.js"></script>
 	<script type="text/javascript" src="/Public/javascripts/zepto.min.js"></script>
@@ -16,6 +16,9 @@
 <style type="text/css">
 .ma_page{
 	top: 40px;
+	/*padding-bottom: 150%;*/
+}
+.ma_page.inputing{
 }
 .ma_selectors{
 	font-size: 15px;
@@ -36,14 +39,14 @@
 }
 .ma_textarea{
 	margin: 0 15px 25px;
-	height: 80px;
+	height: 82px;
 	font-size: 13px;
 	padding: 5px;
 	box-sizing: border-box;
 	color: #9b9b9b;
 	position: relative;
 }
-.ma_textarea:after{
+.ma_textarea:before{
 	content: "";
 	position: absolute;
 	box-sizing: border-box;
@@ -54,9 +57,10 @@
 	transform-origin: center;
 	transform: scale(0.5);
 	border: 1px solid #e4e4e4;
+	z-index: 1;
 }
 .page_btn{
-	margin-bottom: 30px;
+	margin-bottom: 80px;
 }
 
 </style>
@@ -107,10 +111,11 @@
 				<p>备<i style="color:transparent;">备注</i>注</p>
 			</div>
 		</a>
-		<div class="ma_textarea" contenteditable="true">
-			您的特殊要求，如多宠物，新宠物等
+		<div class="ma_textarea">
+			<textarea rows="4" class="weui-textarea" placeholder="您的特殊要求，如多宠物，新宠物等" style="position: relative;z-index: 2;"></textarea>
 		</div>
 	</div>
+
 	<div class="page_btn">
 		<a href="javascript:;" class="weui-btn weui-btn_primary">申请预约</a>
 	</div>
@@ -215,7 +220,7 @@ $(function() {
 				setTimeout(function(){
 					// 二级调用：时间
 					show_expect_time_picker(_this, result);
-				}, 1000);
+				}, 600);
 			},
 			id: 'ma_expect_date'
 		});
@@ -249,18 +254,10 @@ $(function() {
 		});
 	}
 
-	// -----------------------备注placeholder效果
-	$('.ma_textarea').focus(function(event) {
-		var text = $(this).text() || '';
-		if (text.replace(/^\s*|\s*$/g, '') === '您的特殊要求，如多宠物，新宠物等') {
-			$(this).text('');
-		}
-	});
-	$('.ma_textarea').blur(function(event) {
-		var text = $(this).text() || '';
-		if (text.replace(/^\s*|\s*$/g, '') === '') {
-			$(this).text('您的特殊要求，如多宠物，新宠物等');
-		}
+	$('.ma_textarea textarea').click(function(event) {
+		setTimeout(function() {
+			$('.ma_page').scrollTop(180);
+		}, 500);
 	});
 });
 </script>
