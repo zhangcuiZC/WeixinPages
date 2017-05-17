@@ -4,7 +4,7 @@
 	<title>宠主助手-dev</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
-	<link rel="stylesheet" href="/Public/stylesheets/weui.min.css?v=1">
+	<link rel="stylesheet" href="/Public/stylesheets/weui.min.css?v=4">
 	<link rel="stylesheet" href="/Public/stylesheets/common.css?t=<?php echo time();?>">
 	<script type="text/javascript" src="/Public/javascripts/weui.min.js"></script>
 	<script type="text/javascript" src="/Public/javascripts/zepto.min.js"></script>
@@ -66,9 +66,9 @@
 </style>
 <div class="page_fixed">
 	<div class="page_header">
-		<div class="page_header_left">个人中心</div>
+		<a class="page_header_left" href="/Home/Index/PersonCenter">个人中心</a>
 		在线预约
-		<div class="page_header_right"></div>
+		<a class="page_header_right" href="/Home/Index/AppointmentNotice"></a>
 	</div>
 </div>
 
@@ -243,10 +243,17 @@ $(function() {
 			minites.push(minites_item);
 		}
 		
-		weui.picker(hours, minites, {
+		var symbol = [
+			{
+				label: ':',
+				value: 0
+			}
+		];
+
+		weui.picker(hours, symbol, minites, {
 			defaultValue: [new Date().getHours()+1, 0],
 			onConfirm: function(result) {
-				var time = result[0].label + ':' + result[1].label;
+				var time = result[0].label + ':' + result[2].label;
 				var expect_date = date + ' ' + time;
 				$(_this).find('.weui-cell__ft').text(expect_date);
 			},
@@ -262,5 +269,16 @@ $(function() {
 });
 </script>
 	</div>
+
+	<script type="text/javascript">
+		var loading = weui.loading('加载中...', {
+		    className: 'loading'
+		});
+		window.onload = function(){
+			setTimeout(function(){
+				loading.hide();
+			}, 100);
+		}
+	</script>
 </body>
 </html>

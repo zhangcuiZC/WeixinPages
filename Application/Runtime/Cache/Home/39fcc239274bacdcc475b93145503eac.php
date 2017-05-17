@@ -4,7 +4,7 @@
 	<title>宠主助手-dev</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
-	<link rel="stylesheet" href="/Public/stylesheets/weui.min.css?v=1">
+	<link rel="stylesheet" href="/Public/stylesheets/weui.min.css?v=4">
 	<link rel="stylesheet" href="/Public/stylesheets/common.css?t=<?php echo time();?>">
 	<script type="text/javascript" src="/Public/javascripts/weui.min.js"></script>
 	<script type="text/javascript" src="/Public/javascripts/zepto.min.js"></script>
@@ -72,12 +72,12 @@
 
 <div class="page_fixed">
 	<div class="page_header">
-		<div class="page_header_left">个人中心</div>
+		<a class="page_header_left" href="/Home/Index/PersonCenter">个人中心</a>
 		消费记录
 	</div>
 	<div class="pc_hospital">
 		全心全意动物医院（北辰店）
-		<a href="javascript:;" class="weui-btn weui-btn_mini weui-btn_primary" style="float: right;margin-top: 7px;">更换</a>
+		<a href="/Home/Index/ChooseHospital" class="weui-btn weui-btn_mini weui-btn_primary" style="float: right;margin-top: 7px;">更换</a>
 	</div>
 	<div class="weui-panel petc_selector">
 		<div class="weui-panel__bd">
@@ -86,33 +86,39 @@
 	</div>
 </div>
 <div class="petc_page page">
-	<div class="weui-panel weui-cell_access">
-		<div class="weui-panel__bd">
-			<div class="weui-media-box weui-media-box_text">
-				<h4 class="weui-media-box__title">-￥100.00</h4>
-				<p class="weui-media-box__desc">2017/09/09（周三）&nbsp;&nbsp;&nbsp;&nbsp;宠物：嘟嘟</p>
+	<a href="/Home/Index/PurchaseHistoryDetail">
+		<div class="weui-panel weui-cell_access">
+			<div class="weui-panel__bd">
+				<div class="weui-media-box weui-media-box_text">
+					<h4 class="weui-media-box__title">-￥100.00</h4>
+					<p class="weui-media-box__desc">2017/09/09（周三）&nbsp;&nbsp;&nbsp;&nbsp;宠物：嘟嘟</p>
+				</div>
 			</div>
+			<span class="weui-cell__ft"></span>
 		</div>
-		<span class="weui-cell__ft"></span>
-	</div>
-	<div class="weui-panel weui-cell_access">
-		<div class="weui-panel__bd">
-			<div class="weui-media-box weui-media-box_text">
-				<h4 class="weui-media-box__title">-￥8888.88</h4>
-				<p class="weui-media-box__desc">2017/09/09（周三）&nbsp;&nbsp;&nbsp;&nbsp;宠物：嘟嘟</p>
+	</a>
+	<a href="/Home/Index/PurchaseHistoryDetail">
+		<div class="weui-panel weui-cell_access">
+			<div class="weui-panel__bd">
+				<div class="weui-media-box weui-media-box_text">
+					<h4 class="weui-media-box__title">-￥8888.88</h4>
+					<p class="weui-media-box__desc">2017/09/09（周三）&nbsp;&nbsp;&nbsp;&nbsp;宠物：嘟嘟</p>
+				</div>
 			</div>
+			<span class="weui-cell__ft"></span>
 		</div>
-		<span class="weui-cell__ft"></span>
-	</div>
-	<div class="weui-panel weui-cell_access">
-		<div class="weui-panel__bd">
-			<div class="weui-media-box weui-media-box_text">
-				<h4 class="weui-media-box__title">-￥2.33</h4>
-				<p class="weui-media-box__desc">2017/09/09（周三）&nbsp;&nbsp;&nbsp;&nbsp;宠物：嘟嘟</p>
+	</a>
+	<a href="/Home/Index/PurchaseHistoryDetail">
+		<div class="weui-panel weui-cell_access">
+			<div class="weui-panel__bd">
+				<div class="weui-media-box weui-media-box_text">
+					<h4 class="weui-media-box__title">-￥2.33</h4>
+					<p class="weui-media-box__desc">2017/09/09（周三）&nbsp;&nbsp;&nbsp;&nbsp;宠物：嘟嘟</p>
+				</div>
 			</div>
+			<span class="weui-cell__ft"></span>
 		</div>
-		<span class="weui-cell__ft"></span>
-	</div>
+	</a>
 	<div style="width: 100%;height: 1px;"></div>
 </div>
 
@@ -133,5 +139,16 @@ $(function() {
 });
 </script>
 	</div>
+
+	<script type="text/javascript">
+		var loading = weui.loading('加载中...', {
+		    className: 'loading'
+		});
+		window.onload = function(){
+			setTimeout(function(){
+				loading.hide();
+			}, 100);
+		}
+	</script>
 </body>
 </html>

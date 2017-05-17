@@ -4,7 +4,7 @@
 	<title>宠主助手-dev</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
-	<link rel="stylesheet" href="/Public/stylesheets/weui.min.css?v=1">
+	<link rel="stylesheet" href="/Public/stylesheets/weui.min.css?v=4">
 	<link rel="stylesheet" href="/Public/stylesheets/common.css?t=<?php echo time();?>">
 	<script type="text/javascript" src="/Public/javascripts/weui.min.js"></script>
 	<script type="text/javascript" src="/Public/javascripts/zepto.min.js"></script>
@@ -48,7 +48,7 @@
 
 <div class="page_fixed">
 	<div class="page_header">
-		<div class="page_header_left">返回</div>
+		<a class="page_header_left" href="javascript:history.back();">返回</a>
 		预约须知
 	</div>
 </div>
@@ -60,8 +60,19 @@
 	<p class="an_item_content">医院会尽量满足您的期望预约时间，但有时并不能满足您的时间，医院回馈给您的预约时间也许会有小调整。<br><br>当医院为您调整的时间您不满意时，或您需要修改已成功的预约时间，请在我的预约里电话联系医院。<br><br>若您想马上与医院确认一个确切时间，请选择通过电话或其他方式预约医院。</p>
 	<p class="an_item_title item3">您有特殊需求时</p>
 	<p class="an_item_content">若您有特殊需求，比如多只宠物，宠物药物过敏等，请填写在备注里，医院人员是会看到的哦。</p>
-	<a href="javascript:;" class="weui-btn weui-btn_primary" style="margin-top: 30px;margin-bottom: 30px;">申请预约</a>
+	<a href="/Home/Index/MakeAppointment" class="weui-btn weui-btn_primary" style="margin-top: 30px;margin-bottom: 30px;">申请预约</a>
 </div>
 	</div>
+
+	<script type="text/javascript">
+		var loading = weui.loading('加载中...', {
+		    className: 'loading'
+		});
+		window.onload = function(){
+			setTimeout(function(){
+				loading.hide();
+			}, 100);
+		}
+	</script>
 </body>
 </html>

@@ -4,7 +4,7 @@
 	<title>宠主助手-dev</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
-	<link rel="stylesheet" href="/Public/stylesheets/weui.min.css?v=1">
+	<link rel="stylesheet" href="/Public/stylesheets/weui.min.css?v=4">
 	<link rel="stylesheet" href="/Public/stylesheets/common.css?t=<?php echo time();?>">
 	<script type="text/javascript" src="/Public/javascripts/weui.min.js"></script>
 	<script type="text/javascript" src="/Public/javascripts/zepto.min.js"></script>
@@ -84,12 +84,12 @@
 
 <div class="page_fixed">
 	<div class="page_header">
-		<div class="page_header_left">检验单</div>
+		<a class="page_header_left" href="javascript:history.back();">检验单</a>
 		检验报告
 	</div>
 	<div class="pc_hospital">
 		全心全意动物医院（北辰店）
-		<a href="javascript:;" class="weui-btn weui-btn_mini weui-btn_primary" style="float: right;margin-top: 7px;">更换</a>
+		<a href="/Home/Index/ChooseHospital" class="weui-btn weui-btn_mini weui-btn_primary" style="float: right;margin-top: 7px;">更换</a>
 	</div>
 </div>
 <div class="pcd_page page">
@@ -146,5 +146,16 @@
 	<div style="width: 100%;height: 1px;"></div>
 </div>
 	</div>
+
+	<script type="text/javascript">
+		var loading = weui.loading('加载中...', {
+		    className: 'loading'
+		});
+		window.onload = function(){
+			setTimeout(function(){
+				loading.hide();
+			}, 100);
+		}
+	</script>
 </body>
 </html>

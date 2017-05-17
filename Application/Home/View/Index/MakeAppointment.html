@@ -53,9 +53,9 @@
 </style>
 <div class="page_fixed">
 	<div class="page_header">
-		<div class="page_header_left">个人中心</div>
+		<a class="page_header_left" href="/Home/Index/PersonCenter">个人中心</a>
 		在线预约
-		<div class="page_header_right"></div>
+		<a class="page_header_right" href="/Home/Index/AppointmentNotice"></a>
 	</div>
 </div>
 
@@ -230,10 +230,17 @@ $(function() {
 			minites.push(minites_item);
 		}
 		
-		weui.picker(hours, minites, {
+		var symbol = [
+			{
+				label: ':',
+				value: 0
+			}
+		];
+
+		weui.picker(hours, symbol, minites, {
 			defaultValue: [new Date().getHours()+1, 0],
 			onConfirm: function(result) {
-				var time = result[0].label + ':' + result[1].label;
+				var time = result[0].label + ':' + result[2].label;
 				var expect_date = date + ' ' + time;
 				$(_this).find('.weui-cell__ft').text(expect_date);
 			},

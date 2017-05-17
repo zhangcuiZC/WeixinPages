@@ -6,6 +6,9 @@
 	bottom: 0;
 	/*background-color: #fff;*/
 }
+a{
+	color: inherit;
+}
 .page{
 	position: absolute;
 	left: 0;
@@ -13,6 +16,9 @@
 	bottom: 0;
 	overflow-y: auto;
 	-webkit-overflow-scrolling: touch;
+}
+.page > *{
+	z-index: 1;
 }
 .page_fixed{
 	position: absolute;
@@ -208,4 +214,13 @@
 .weui-cell:before{
 	left: 0;
 	height: 0;
+}
+.weui-loading_toast{
+	font-size: 13px;
+}
+.weui-icon_toast.weui-loading{
+	margin-top: 22px;
+}
+.weui-cell_access:active{
+	background-color: #ececec !important;
 }
