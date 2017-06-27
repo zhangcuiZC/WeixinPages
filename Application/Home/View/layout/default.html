@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>宠主助手-dev</title>
+	<title>宠主小助手</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
 	<link rel="stylesheet" href="/Public/stylesheets/weui.min.css?v=4">
@@ -13,16 +13,83 @@
 	<div id="container">
 		{__CONTENT__}
 	</div>
-
 	<script type="text/javascript">
-		var loading = weui.loading('加载中...', {
-		    className: 'loading'
+		$(function() {
+			// 到顶或者到底后禁止滑动（防止拖动微信浏览器窗口）
+			var startY, endY;
+			var box_height = $('#container').height();
+			$('.page').on('touchstart', function(event) {
+				event.stopPropagation();
+				startY = event.touches[0].pageY;
+			});
+			$('.page').on('touchmove', function(event) {
+				event.stopPropagation();
+				var endY = event.changedTouches[0].pageY;
+				var changedY = endY - startY;
+				var scroll_top = $('.page').scrollTop();
+				if (scroll_top === 0 && changedY > 0) {
+					event.preventDefault();
+				}
+
+				var o = $('.bottom_msg').offset();
+				if (o.top + o.height - 1 <= box_height && changedY < 0) {
+					event.preventDefault();
+				}
+			});
+
+
+			// petc_selector置顶
+			var selector_timer = null;
+			$('.page').scroll(function(event) {
+				if (selector_timer) {
+					clearTimeout(selector_timer);
+				}
+				selector_timer = setTimeout(function(){
+					var offset = $('.petc_selector_position').offset();
+					if (offset.top < offset.height) {
+						$('.petc_selector_fixed').show();
+						$('.page_navbar_fixed').show();
+					}else {
+						$('.petc_selector_fixed').hide();
+						$('.page_navbar_fixed').hide();
+					}
+				}, 100);
+			});
 		});
-		window.onload = function(){
-			setTimeout(function(){
-				loading.hide();
-			}, 100);
-		}
+
+		$(window).on('pageshow', function(event) {
+			if (event.persisted) {
+				var loading = $('body > .loading');
+				if (loading.length) {
+					loading.remove();
+				}
+			}
+		});
+		// function bind_redirect_event() {
+		// 	$('.will_redirect').click(function(event) {
+		// 		if(window.navigator.onLine == false){
+		// 			alert('网络错误，请检查网络连接');
+		// 			return false;
+		// 		}else{
+		// 			var loading = weui.loading('加载中...', {
+		// 			    className: 'loading'
+		// 			});
+		// 		}
+		// 	});
+		// }
+		// bind_redirect_event();
+		$('.page_header_right').click(function(event) {
+			event.preventDefault();
+	    	weui.dialog({
+			    title: '联宠软件－提示',
+			    content: '感谢您使用我们的软件，微信端目前开发还未完备，暂时只能显示昨日数据。<br><br>欢迎在软件给我们留言您的建议。',
+			    className: 'mw_notice',
+			    buttons: [{
+			        label: '确定',
+			        type: 'primary'
+			    }]
+			});
+	    });
 	</script>
 </body>
 </html>

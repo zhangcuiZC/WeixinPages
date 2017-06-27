@@ -59,21 +59,23 @@
 		宠物病历
 	</div>
 	<div class="pc_hospital">
-		全心全意动物医院（北辰店）
-		<a href="/Home/Index/ChooseHospital" class="weui-btn weui-btn_mini weui-btn_primary" style="float: right;margin-top: 7px;">更换</a>
+		{$_GET['regname']}
+		<if condition="$_GET['ismulti'] neq ''">
+			<a href="/WxPersonalCenter/chooseHospital?type=REPORT&wxid={$_GET['wxid']}" class="weui-btn weui-btn_mini weui-btn_primary will_redirect">更换</a>
+		</if>
 	</div>
 </div>
 <div class="pcd_page page">
 	<div class="weui-panel pcd_pet_title">
 		<div class="weui-panel__bd">
 			<div class="weui-media-box weui-media-box_text">
-				<h4 class="weui-media-box__title">肠胃炎</h4>
-				<p class="weui-media-box__desc">2017/09/09（周三）&nbsp;&nbsp;&nbsp;&nbsp;宠物：嘟嘟</p>
+				<h4 class="weui-media-box__title">{$data['Abstract']?:'&nbsp;'}</h4>
+				<p class="weui-media-box__desc">{$data['EventTime']}（<?php $w=date('w',strtotime($data['EventTime']));$weekArr=array("周日","周一","周二","周三","周四","周五","周六");echo $weekArr[$w]; ?>）&nbsp;&nbsp;&nbsp;&nbsp;宠物：{$data['PetName']}</p>
 			</div>
 		</div>
 	</div>
 	<div class="weui-cells__title">病例详情</div>
-	<div class="weui-panel pcd_pet_detail" style="margin-top: 0;margin-bottom: 30px;">
+	<div class="weui-panel pcd_pet_detail" style="margin-top: 0;margin-bottom: 10px;">
 		<div class="weui-panel__bd">
 			<div class="weui-media-box weui-media-box_text">
 				<h4 class="weui-media-box__title" style="text-align: center;color: #4990e2;">病历单</h4>
@@ -81,43 +83,65 @@
 					<tbody>
 						<tr>
 							<td width="60px">诊疗科目</td>
-							<td class="pcd_pet_item">外科</td>
+							<td class="pcd_pet_item">{$data['DiagnosisType']}</td>
 						</tr>
 						<tr>
 							<td>病情分类</td>
-							<td class="pcd_pet_item">皮肤科</td>
+							<td class="pcd_pet_item">{$data['Abstract']}</td>
 						</tr>
 						<tr>
 							<td>就诊时间</td>
-							<td class="pcd_pet_item">2017-05-04</td>
+							<td class="pcd_pet_item">{$data['EventTime']}</td>
 						</tr>
 						<tr>
 							<td>主治医生</td>
-							<td class="pcd_pet_item">张海科</td>
+							<td class="pcd_pet_item">{$data['Con_Employee_Name']}</td>
 						</tr>
 						<tr>
 							<td>宠物体重</td>
-							<td class="pcd_pet_item">2.3kg</td>
+							<td class="pcd_pet_item">{$data['Weight']}kg</td>
 						</tr>
+						<if condition="$data['His_Hospitalization_Mid'] eq 0">
+							<tr>
+								<td>主诉记录</td>
+								<td class="pcd_pet_item">{$data['ChiefNote']}</td>
+							</tr>
+							<tr>
+								<td>检验分析</td>
+								<td class="pcd_pet_item">{$data['CheckNote']}</td>
+							</tr>
+							<tr>
+								<td>病情诊断</td>
+								<td class="pcd_pet_item">{$data['ConditionNote']}</td>
+							</tr>
+						<else />
+							<tr>
+								<td>住院病情</td>
+								<td class="pcd_pet_item">{$data['ChiefNote']}</td>
+							</tr>
+							<tr>
+								<td>检验分析</td>
+								<td class="pcd_pet_item">{$data['CheckNote']}</td>
+							</tr>
+							<tr>
+								<td>护理记录</td>
+								<td class="pcd_pet_item">{$data['CareNote']}</td>
+							</tr>
+						</if>
 						<tr>
-							<td>主诉记录</td>
-							<td class="pcd_pet_item">食欲正常，无拉肚子，精神活泼，之前打过一针疫苗，感冒初愈</td>
-						</tr>
-						<tr>
-							<td>检验分析</td>
-							<td class="pcd_pet_item">犬大小孢子菌感染，头部有螨虫细菌混合感染。</td>
-						</tr>
-						<tr>
-							<td>病情诊断</td>
-							<td class="pcd_pet_item">重度猫癣（3级）</td>
+							<td>处理治疗</td>
+							<td class="pcd_pet_item">{$data['ProcessNote']}</td>
 						</tr>
 						<tr>
 							<td>医<span style="color: transparent;">医嘱</span>嘱</td>
-							<td class="pcd_pet_item">每日早晚喷皮特分于病灶处，一周3次药浴。每周打一次抗真菌疫苗。每日早晚喷皮特分于病灶处，一周3次药浴。每周打一次抗真菌疫苗。每日早晚喷皮特分于病灶处，一周3次药浴。每周打一次抗真菌疫苗。每日早晚喷皮特分于病灶处，一周3次药浴。每周打一次抗真菌疫苗。</td>
+							<td class="pcd_pet_item">{$data['PhysicalOrder']}</td>
 						</tr>
 					</tbody>
 				</table>
 			</div>
 		</div>
+	</div>
+	<div class="weui-loadmore nomore_detail">
+	    <span class="weui-loadmore__tips">无更多数据</span>
 	</div>
 </div>

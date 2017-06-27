@@ -28,7 +28,6 @@
 	}
 	.pcds_page .weui-cell__ft{
 		padding-right: 0;
-		
 	}
 	.pcds_page .weui-cell .arrow{
 		float: right;
@@ -122,248 +121,100 @@
 
 <div class="page_fixed">
 	<div class="page_header">
-		<a class="page_header_left" href="/Home/Index/PetCase">病历单</a>
+		<a class="page_header_left will_redirect" href="/WxPetCase/petCase?regcode={$_GET['regcode']}&regname={$_GET['regname']}&consumermid={$_GET['consumermid']}&wxid={$_GET['wxid']}&ismulti={$_GET['ismulti']}">病历单</a>
 		病历明细
 	</div>
 	<div class="pc_hospital">
-		全心全意动物医院（北辰店）
-		<a href="/Home/Index/ChooseHospital" class="weui-btn weui-btn_mini weui-btn_primary" style="float: right;margin-top: 7px;">更换</a>
+		{$_GET['regname']}
+		<if condition="$_GET['ismulti'] neq ''">
+			<a href="/WxPersonalCenter/chooseHospital?type=REPORT&wxid={$_GET['wxid']}" class="weui-btn weui-btn_mini weui-btn_primary will_redirect">更换</a>
+		</if>
 	</div>
 </div>
 <div class="pcds_page page">
 	<div class="weui-cells pcds_list">
-	    <div class="weui-cell weui-cell_access">
-	        <div class="weui-cell__hd"></div>
-	        <div class="weui-cell__bd">
-	            <p>皮肤科（茉茉）</p>
-	        </div>
-	        <div class="weui-cell__ft">2017/05/04<i class="arrow"></i></div>
-	    </div>
-	    <div class="pcds_detail_box">
-		    <div class="pcds_detail">
-				<div class="weui-panel pcd_pet_detail">
-					<div class="weui-panel__bd">
-						<div class="weui-media-box weui-media-box_text">
-							<h4 class="weui-media-box__title" style="text-align: center;color: #4990e2;">病历单</h4>
-							<table class="pcd_table">
-								<tbody>
-									<tr>
-										<td width="60px">诊疗科目</td>
-										<td class="pcd_pet_item">外科</td>
-									</tr>
-									<tr>
-										<td>病情分类</td>
-										<td class="pcd_pet_item">皮肤科</td>
-									</tr>
-									<tr>
-										<td>就诊时间</td>
-										<td class="pcd_pet_item">2017-05-04</td>
-									</tr>
-									<tr>
-										<td>主治医生</td>
-										<td class="pcd_pet_item">张海科</td>
-									</tr>
-									<tr>
-										<td>宠物体重</td>
-										<td class="pcd_pet_item">2.3kg</td>
-									</tr>
-									<tr>
-										<td>主诉记录</td>
-										<td class="pcd_pet_item">食欲正常，无拉肚子，精神活泼，之前打过一针疫苗，感冒初愈</td>
-									</tr>
-									<tr>
-										<td>检验分析</td>
-										<td class="pcd_pet_item">犬大小孢子菌感染，头部有螨虫细菌混合感染。</td>
-									</tr>
-									<tr>
-										<td>病情诊断</td>
-										<td class="pcd_pet_item">重度猫癣（3级）</td>
-									</tr>
-									<tr>
-										<td>医<span style="color: transparent;">医嘱</span>嘱</td>
-										<td class="pcd_pet_item">每日早晚喷皮特分于病灶处，一周3次药浴。每周打一次抗真菌疫苗。每日早晚喷皮特分于病灶处，一周3次药浴。每周打一次抗真菌疫苗。每日早晚喷皮特分于病灶处，一周3次药浴。每周打一次抗真菌疫苗。每日早晚喷皮特分于病灶处，一周3次药浴。每周打一次抗真菌疫苗。</td>
-									</tr>
-								</tbody>
-							</table>
+		<volist name="datas" id="vo">
+			<div class="weui-cell weui-cell_access">
+			    <div class="weui-cell__hd"></div>
+			    <div class="weui-cell__bd">
+			        <p>{$vo['Abstract']}（{$vo['PetName']}）</p>
+			    </div>
+			    <div class="weui-cell__ft">{$vo['EventTime']|substr=0,9}<i class="arrow"></i></div>
+			</div>
+			<div class="pcds_detail_box">
+			    <div class="pcds_detail">
+					<div class="weui-panel pcd_pet_detail">
+						<div class="weui-panel__bd">
+							<div class="weui-media-box weui-media-box_text">
+								<h4 class="weui-media-box__title" style="text-align: center;color: #4990e2;">病历单</h4>
+								<table class="pcd_table">
+									<tbody>
+										<tr>
+											<td width="60px">诊疗科目</td>
+											<td class="pcd_pet_item">{$vo['DiagnosisType']}</td>
+										</tr>
+										<tr>
+											<td>病情分类</td>
+											<td class="pcd_pet_item">{$vo['Abstract']}</td>
+										</tr>
+										<tr>
+											<td>就诊时间</td>
+											<td class="pcd_pet_item">{$vo['EventTime']}</td>
+										</tr>
+										<tr>
+											<td>主治医生</td>
+											<td class="pcd_pet_item">{$vo['Con_Employee_Name']}</td>
+										</tr>
+										<tr>
+											<td>宠物体重</td>
+											<td class="pcd_pet_item">{$vo['Weight']}kg</td>
+										</tr>
+										<if condition="$vo['His_Hospitalization_Mid'] eq 0">
+											<tr>
+												<td>主诉记录</td>
+												<td class="pcd_pet_item">{$vo['ChiefNote']}</td>
+											</tr>
+											<tr>
+												<td>检验分析</td>
+												<td class="pcd_pet_item">{$vo['CheckNote']}</td>
+											</tr>
+											<tr>
+												<td>病情诊断</td>
+												<td class="pcd_pet_item">{$vo['ConditionNote']}</td>
+											</tr>
+										<else />
+											<tr>
+												<td>住院病情</td>
+												<td class="pcd_pet_item">{$vo['ChiefNote']}</td>
+											</tr>
+											<tr>
+												<td>检验分析</td>
+												<td class="pcd_pet_item">{$vo['CheckNote']}</td>
+											</tr>
+											<tr>
+												<td>护理记录</td>
+												<td class="pcd_pet_item">{$vo['CareNote']}</td>
+											</tr>
+										</if>
+										<tr>
+											<td>处理治疗</td>
+											<td class="pcd_pet_item">{$vo['ProcessNote']}</td>
+										</tr>
+										<tr>
+											<td>医<span style="color: transparent;">医嘱</span>嘱</td>
+											<td class="pcd_pet_item">{$vo['PhysicalOrder']}</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
 						</div>
 					</div>
-				</div>
-		    </div>
-	    </div>
-	    <div class="weui-cell weui-cell_access">
-	        <div class="weui-cell__hd"></div>
-	        <div class="weui-cell__bd">
-	            <p>病历单（莉莉）</p>
-	        </div>
-	        <div class="weui-cell__ft">2017/05/04<i class="arrow"></i></div>
-	    </div>
-	    <div class="pcds_detail_box">
-		    <div class="pcds_detail">
-				<div class="weui-panel pcd_pet_detail">
-					<div class="weui-panel__bd">
-						<div class="weui-media-box weui-media-box_text">
-							<h4 class="weui-media-box__title" style="text-align: center;color: #4990e2;">病历单</h4>
-							<table class="pcd_table">
-								<tbody>
-									<tr>
-										<td width="60px">诊疗科目</td>
-										<td class="pcd_pet_item">外科</td>
-									</tr>
-									<tr>
-										<td>病情分类</td>
-										<td class="pcd_pet_item">皮肤科</td>
-									</tr>
-									<tr>
-										<td>就诊时间</td>
-										<td class="pcd_pet_item">2017-05-04</td>
-									</tr>
-									<tr>
-										<td>主治医生</td>
-										<td class="pcd_pet_item">张海科</td>
-									</tr>
-									<tr>
-										<td>宠物体重</td>
-										<td class="pcd_pet_item">2.3kg</td>
-									</tr>
-									<tr>
-										<td>主诉记录</td>
-										<td class="pcd_pet_item">食欲正常，无拉肚子，精神活泼，之前打过一针疫苗，感冒初愈</td>
-									</tr>
-									<tr>
-										<td>检验分析</td>
-										<td class="pcd_pet_item">犬大小孢子菌感染，头部有螨虫细菌混合感染。</td>
-									</tr>
-									<tr>
-										<td>病情诊断</td>
-										<td class="pcd_pet_item">重度猫癣（3级）</td>
-									</tr>
-									<tr>
-										<td>医<span style="color: transparent;">医嘱</span>嘱</td>
-										<td class="pcd_pet_item">每日早晚喷皮特分于病灶处，一周3次药浴。每周打一次抗真菌疫苗。每日早晚喷皮特分于病灶处，一周3次药浴。每周打一次抗真菌疫苗。每日早晚喷皮特分于病灶处，一周3次药浴。每周打一次抗真菌疫苗。每日早晚喷皮特分于病灶处，一周3次药浴。每周打一次抗真菌疫苗。</td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
-					</div>
-				</div>
-		    </div>
-	    </div>
-	    <div class="weui-cell weui-cell_access">
-	        <div class="weui-cell__hd"></div>
-	        <div class="weui-cell__bd">
-	            <p>病历单（花花）</p>
-	        </div>
-	        <div class="weui-cell__ft">2017/05/04<i class="arrow"></i></div>
-	    </div>
-	    <div class="pcds_detail_box">
-		    <div class="pcds_detail">
-				<div class="weui-panel pcd_pet_detail">
-					<div class="weui-panel__bd">
-						<div class="weui-media-box weui-media-box_text">
-							<h4 class="weui-media-box__title" style="text-align: center;color: #4990e2;">病历单</h4>
-							<table class="pcd_table">
-								<tbody>
-									<tr>
-										<td width="60px">诊疗科目</td>
-										<td class="pcd_pet_item">外科</td>
-									</tr>
-									<tr>
-										<td>病情分类</td>
-										<td class="pcd_pet_item">皮肤科</td>
-									</tr>
-									<tr>
-										<td>就诊时间</td>
-										<td class="pcd_pet_item">2017-05-04</td>
-									</tr>
-									<tr>
-										<td>主治医生</td>
-										<td class="pcd_pet_item">张海科</td>
-									</tr>
-									<tr>
-										<td>宠物体重</td>
-										<td class="pcd_pet_item">2.3kg</td>
-									</tr>
-									<tr>
-										<td>主诉记录</td>
-										<td class="pcd_pet_item">食欲正常，无拉肚子，精神活泼，之前打过一针疫苗，感冒初愈</td>
-									</tr>
-									<tr>
-										<td>检验分析</td>
-										<td class="pcd_pet_item">犬大小孢子菌感染，头部有螨虫细菌混合感染。</td>
-									</tr>
-									<tr>
-										<td>病情诊断</td>
-										<td class="pcd_pet_item">重度猫癣（3级）</td>
-									</tr>
-									<tr>
-										<td>医<span style="color: transparent;">医嘱</span>嘱</td>
-										<td class="pcd_pet_item">每日早晚喷皮特分于病灶处，一周3次药浴。每周打一次抗真菌疫苗。每日早晚喷皮特分于病灶处，一周3次药浴。每周打一次抗真菌疫苗。每日早晚喷皮特分于病灶处，一周3次药浴。每周打一次抗真菌疫苗。每日早晚喷皮特分于病灶处，一周3次药浴。每周打一次抗真菌疫苗。</td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
-					</div>
-				</div>
-		    </div>
-	    </div>
-	    <div class="weui-cell weui-cell_access">
-	        <div class="weui-cell__hd"></div>
-	        <div class="weui-cell__bd">
-	            <p>病历单（茶茶）</p>
-	        </div>
-	        <div class="weui-cell__ft">2017/05/04<i class="arrow"></i></div>
-	    </div>
-	    <div class="pcds_detail_box">
-		    <div class="pcds_detail">
-				<div class="weui-panel pcd_pet_detail">
-					<div class="weui-panel__bd">
-						<div class="weui-media-box weui-media-box_text">
-							<h4 class="weui-media-box__title" style="text-align: center;color: #4990e2;">病历单</h4>
-							<table class="pcd_table">
-								<tbody>
-									<tr>
-										<td width="60px">诊疗科目</td>
-										<td class="pcd_pet_item">外科</td>
-									</tr>
-									<tr>
-										<td>病情分类</td>
-										<td class="pcd_pet_item">皮肤科</td>
-									</tr>
-									<tr>
-										<td>就诊时间</td>
-										<td class="pcd_pet_item">2017-05-04</td>
-									</tr>
-									<tr>
-										<td>主治医生</td>
-										<td class="pcd_pet_item">张海科</td>
-									</tr>
-									<tr>
-										<td>宠物体重</td>
-										<td class="pcd_pet_item">2.3kg</td>
-									</tr>
-									<tr>
-										<td>主诉记录</td>
-										<td class="pcd_pet_item">食欲正常，无拉肚子，精神活泼，之前打过一针疫苗，感冒初愈</td>
-									</tr>
-									<tr>
-										<td>检验分析</td>
-										<td class="pcd_pet_item">犬大小孢子菌感染，头部有螨虫细菌混合感染。</td>
-									</tr>
-									<tr>
-										<td>病情诊断</td>
-										<td class="pcd_pet_item">重度猫癣（3级）</td>
-									</tr>
-									<tr>
-										<td>医<span style="color: transparent;">医嘱</span>嘱</td>
-										<td class="pcd_pet_item">每日早晚喷皮特分于病灶处，一周3次药浴。每周打一次抗真菌疫苗。每日早晚喷皮特分于病灶处，一周3次药浴。每周打一次抗真菌疫苗。每日早晚喷皮特分于病灶处，一周3次药浴。每周打一次抗真菌疫苗。每日早晚喷皮特分于病灶处，一周3次药浴。每周打一次抗真菌疫苗。</td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
-					</div>
-				</div>
-		    </div>
-	    </div>
+			    </div>
+			</div>
+		</volist>
+	</div>
+	<div class="weui-loadmore nomore_detail">
+	    <span class="weui-loadmore__tips">无更多数据</span>
 	</div>
 </div>
 

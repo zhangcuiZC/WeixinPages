@@ -1,4 +1,4 @@
-<layout name="layout/default" />
+<layout name="/layout/default" />
 
 <style type="text/css">
 	.cs_page{
@@ -40,13 +40,13 @@
 <script type="text/javascript" src="/Public/javascripts/echarts.min.js"></script>
 <div class="page_fixed">
 	<div class="page_header">
-		<a class="page_header_left" href="/Home/Index/PersonCenter">个人中心</a>
+		<a class="page_header_left" href="/WxPersonalCenter/personCenter">个人中心</a>
 		消费统计
 		<div class="page_header_right"></div>
 	</div>
 	<div class="pc_hospital">
 		全心全意动物医院（北辰店）
-		<a href="/Home/Index/ChooseHospital" class="weui-btn weui-btn_mini weui-btn_primary" style="float: right;margin-top: 7px;">更换</a>
+		<a href="/WxPersonalCenter/chooseHospital" class="weui-btn weui-btn_mini weui-btn_primary">更换</a>
 	</div>
 </div>
 <div class="cs_page page">
@@ -57,7 +57,6 @@
 	<div id="chart_box">
 		
 	</div>
-	<!-- <img src="/Public/images/icon_jiyang.png" alt="1" id="img1"> -->
 </div>
 
 <script type="text/javascript">
@@ -170,10 +169,10 @@ $(function() {
 	            clockwise: false,
 	            label: {
 	            	normal: {
-	            		formatter: '￥{c}\n{b}'
+	            		formatter: '￥{c}\\n{b}'
 	            	},
 	            	emphasis: {
-	            		formatter : '{d}%\n{b}'
+	            		formatter : '{d}%\\n{b}'
 	            	}
 	            },
 	            data: series_data,

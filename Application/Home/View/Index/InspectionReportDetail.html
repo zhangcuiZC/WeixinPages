@@ -75,16 +75,18 @@
 		检验报告
 	</div>
 	<div class="pc_hospital">
-		全心全意动物医院（北辰店）
-		<a href="/Home/Index/ChooseHospital" class="weui-btn weui-btn_mini weui-btn_primary" style="float: right;margin-top: 7px;">更换</a>
+		{$_GET['regname']}
+		<if condition="$_GET['ismulti'] neq ''">
+			<a href="/WxPersonalCenter/chooseHospital?type=INSPECT&wxid={$_GET['wxid']}" class="weui-btn weui-btn_mini weui-btn_primary will_redirect">更换</a>
+		</if>
 	</div>
 </div>
 <div class="pcd_page page">
 	<div class="weui-panel pcd_pet_title">
 		<div class="weui-panel__bd">
 			<div class="weui-media-box weui-media-box_text">
-				<h4 class="weui-media-box__title">生化七项检验</h4>
-				<p class="weui-media-box__desc">2017/09/09（周三）&nbsp;&nbsp;&nbsp;&nbsp;宠物：嘟嘟</p>
+				<h4 class="weui-media-box__title">{$_GET['t1']}</h4>
+				<p class="weui-media-box__desc">{$_GET['t2']}（<?php $w=date('w',strtotime($_GET['t2']));$weekArr=array("周日","周一","周二","周三","周四","周五","周六");echo $weekArr[$w]; ?>）&nbsp;&nbsp;&nbsp;&nbsp;宠物：{$_GET['t3']}</p>
 			</div>
 		</div>
 	</div>
@@ -92,7 +94,7 @@
 	<div class="weui-panel pcd_pet_detail" style="margin-top: 0;margin-bottom: 30px;">
 		<div class="weui-panel__bd">
 			<div class="weui-media-box weui-media-box_text">
-				<h4 class="weui-media-box__title" style="text-align: center;color: #4990e2;">生化七项检测单</h4>
+				<h4 class="weui-media-box__title" style="text-align: center;color: #4990e2;">{$_GET['t1']}检测单</h4>
 				<table class="pcd_table">
 					<tbody>
 						<tr class="ird_table_head">
@@ -101,34 +103,28 @@
 							<td width="18%">单位</td>
 							<td width="24%">参考范围</td>
 						</tr>
-						<tr>
-							<td>并氨基酸转化</td>
-							<td>10<span class="up">↑</span></td>
-							<td>U/L</td>
-							<td>0-40</td>
-						</tr>
-						<tr>
-							<td>并氨基酸转化并氨基酸转化并氨基酸转化</td>
-							<td>10<span class="up">↑</span></td>
-							<td>U/L</td>
-							<td>0-40</td>
-						</tr>
-						<tr>
-							<td>并氨基酸转化</td>
-							<td>10<span class="down">↓</span></td>
-							<td>U/L</td>
-							<td>0-40</td>
-						</tr>
-						<tr>
-							<td>并氨基酸转化</td>
-							<td>10<span class="down">↓</span></td>
-							<td>U/L</td>
-							<td>0-40</td>
-						</tr>
+						<volist name="datas" id="vo">
+							<tr>
+							<!-- <span class="up">↑</span> -->
+								<td>{$vo['ExamineItemName']}</td>
+								<td>{$vo['ExamineResult']}
+									<if condition="($vo['ExamineResult'] neq '') AND ($vo['ExamineResult'] lt $vo['ExamineLowValue'])">
+										<span class="down">↓</span>
+									</if>
+									<if condition="($vo['ExamineResult'] neq '') AND ($vo['ExamineResult'] gt $vo['ExamineHighValue'])">
+										<span class="up">↑</span>
+									</if>
+								</td>
+								<td>{$vo['ExamineItemUnit']?:'-'}</td>
+								<td>{$vo['ExamineLowValue']}-{$vo['ExamineHighValue']}</td>
+							</tr>
+						</volist>
 					</tbody>
 				</table>
 			</div>
 		</div>
 	</div>
-	<div style="width: 100%;height: 1px;"></div>
+	<div class="weui-loadmore nomore_detail">
+	    <span class="weui-loadmore__tips">无更多数据</span>
+	</div>
 </div>

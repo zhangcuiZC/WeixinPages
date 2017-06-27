@@ -1,0 +1,126 @@
+<layout name="layout/default" />
+
+<style type="text/css">
+#container{
+	background-color: #efeff3;
+}
+.mya_page{
+	top: 80px;
+	padding-top: 10px;
+	background-color: #efeff3;
+}
+.mya_page .weui-cell{
+	height: 32px;
+}
+.mya_contact_box{
+	font-size: 13px;
+	color: #4a4a4a;
+}
+.mya_contact{
+	padding-left: 25px;
+	margin: 0 auto;
+	background: url(/Public/images/icon_dianhua.png) no-repeat left -5px;
+	background-size: 25px;
+}
+.mya_success{
+	font-size: 13px;
+	color: #04ad02;
+	position: absolute;
+	right: 15px;
+	top: 15px;
+	line-height: 27px;
+}
+.mya_waiting{
+	font-size: 13px;
+	color: #e75b41;
+	position: absolute;
+	line-height: 27px;
+	right: 15px;
+	top: 15px;
+	text-align: center;
+}
+</style>
+
+<div class="page_fixed">
+	<div class="page_header">
+		<a class="page_header_left" href="/Home/Index/PersonCenter">个人中心</a>
+		我的预约
+		<a class="page_header_right" href="/Home/Index/AppointmentNotice"></a>
+	</div>
+	<div class="pc_hospital">
+		全心全意动物医院（北辰店）
+		<a href="/Home/Index/ChooseHospital" class="weui-btn weui-btn_mini weui-btn_primary" style="float: right;margin-top: 7px;">更换</a>
+	</div>
+</div>
+<div class="mya_page page">
+	<div class="weui-panel">
+		<div class="weui-panel__bd">
+			<div class="weui-media-box weui-media-box_text">
+				<p class="weui-media-box__desc">预约时间：<span class="item_content">2017/09/03 16:00</span></p>
+				<p class="weui-media-box__desc">预约项目：<span class="item_content">美容洗澡</span></p>
+				<p class="weui-media-box__desc">预约时间：<span class="item_content">花花</span></p>
+			</div>
+		</div>
+		<div class="weui-panel__ft weui-cell mya_contact_box weui-cell_access contact_btn">
+			<span class="mya_contact">联系医院</span>
+		</div>
+		<div style="display: none;" class="contact_dialog">
+		    <div class="weui-mask"></div>
+		    <div class="weui-dialog">
+		        <div class="weui-dialog__hd"><strong class="weui-dialog__title">拨打号码</strong></div>
+		        <div class="weui-dialog__bd">您是否要拨打全心全意动物医院（朝阳店）电话？（1881028112）</div>
+		        <div class="weui-dialog__ft">
+		            <a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_default contact_cancel">取消</a>
+		            <a href="tel:10010" class="weui-dialog__btn weui-dialog__btn_primary">确认</a>
+		        </div>
+		    </div>
+		</div>
+		<div class="mya_success">
+			预约成功
+		</div>
+	</div>
+
+	<div class="weui-panel">
+		<div class="weui-panel__bd">
+			<div class="weui-media-box weui-media-box_text">
+				<p class="weui-media-box__desc">预约时间：<span class="item_content">2017/09/03 16:00</span></p>
+				<p class="weui-media-box__desc">预约项目：<span class="item_content">美容洗澡</span></p>
+				<p class="weui-media-box__desc">预约时间：<span class="item_content">花花</span></p>
+			</div>
+		</div>
+		<div class="weui-panel__ft weui-cell mya_contact_box weui-cell_access contact_btn">
+			<span class="mya_contact">联系医院</span>
+		</div>
+		<div style="display: none;" class="contact_dialog">
+		    <div class="weui-mask"></div>
+		    <div class="weui-dialog">
+		        <div class="weui-dialog__hd"><strong class="weui-dialog__title">拨打号码</strong></div>
+		        <div class="weui-dialog__bd">您是否要拨打全心全意动物医院（朝阳店）电话？（1881028112）</div>
+		        <div class="weui-dialog__ft">
+		            <a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_default contact_cancel">取消</a>
+		            <a href="tel:10010" class="weui-dialog__btn weui-dialog__btn_primary">确认</a>
+		        </div>
+		    </div>
+		</div>
+		<div class="mya_waiting">
+			等待确认
+			<a href="javascript:;" class="weui-btn weui-btn_mini weui-btn_warn" style="display: block;width: 60px;padding: 0">催医院</a>
+		</div>
+	</div>
+
+	<div class="weui-footer" style="background-color: transparent;margin-top: 55px;padding-bottom: 30px">
+		<p class="weui-footer__text" style="font-size: 13px;color: #9b9b9b;">预约成功后请准时赴约哦～</p>
+	</div>
+</div>
+
+<script type="text/javascript">
+$(function() {
+	$('.contact_btn').click(function(event) {
+		$(this).siblings('.contact_dialog').show();
+	});
+	$('.contact_cancel').click(function(event) {
+		$(this).parents('.contact_dialog').hide();
+	});
+
+});
+</script>

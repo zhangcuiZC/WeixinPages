@@ -57,47 +57,83 @@
 </style>
 
 <div class="pc_header">
-	<div class="pc_icon"><img src="/Public/images/nav_help_title1.png"></div>
-	<p class="pc_name">Hi，茉莉花茶</p>
+	<div class="pc_icon"><img src="/Public/images/touxiang@2x.png"></div>
+	<p class="pc_name">{$info['consumername']}<?php if($info['consumermobile']){echo '(' . $info['consumermobile'] . ')';} ?></p>
 </div>
 <div class="pc_hospital">
-	全心全意动物医院（北辰店）
-	<a href="/Home/Index/ChooseHospital" class="weui-btn weui-btn_mini weui-btn_primary" style="float: right;margin-top: 7px;">更换</a>
+	{$_GET['regname']}
+	<if condition="$_GET['ismulti'] neq ''">
+		<a href="/WxPersonalCenter/chooseHospital?type=HOME&wxid={$_GET['wxid']}" class="weui-btn weui-btn_mini weui-btn_primary will_redirect" >更换</a>
+	</if>
 </div>
 <div class="weui-cells pc_main">
-    <a class="weui-cell weui-cell_access" href="/Home/Index/MyAppointment">
+	<if condition="$info['isappointment'] eq '1'">
+    	<a class="weui-cell weui-cell_access will_redirect" href="/WxAppointment/myAppointment?regcode={$_GET['regcode']}&regname={$_GET['regname']}&consumermid={$_GET['consumermid']}&wxid={$_GET['wxid']}&ismulti={$_GET['ismulti']}">
+    <else />
+    	<a class="weui-cell weui-cell_access" href="javascript:show_alert_msg('{$Think.get.regname}尚未开通该功能');">
+    </if>
         <div class="weui-cell__hd"><img src="/Public/images/icon_pp_yuyue.png" alt="" style="width:20px;margin-right:15px;display:block"></div>
         <div class="weui-cell__bd">
             <p>我的预约</p>
         </div>
         <div class="weui-cell__ft"></div>
     </a>
-    <a class="weui-cell weui-cell_access" href="/Home/Index/PetCase">
+
+    <if condition="$info['isreport'] eq '1'">
+    	<a class="weui-cell weui-cell_access will_redirect" href="/WxPetCase/petCase?regcode={$_GET['regcode']}&regname={$_GET['regname']}&consumermid={$_GET['consumermid']}&wxid={$_GET['wxid']}&ismulti={$_GET['ismulti']}">
+    <else />
+    	<a class="weui-cell weui-cell_access" href="javascript:show_alert_msg('{$Think.get.regname}尚未开通该功能');">
+    </if>
         <div class="weui-cell__hd"><img src="/Public/images/icon_pp_bingli.png" alt="" style="width:20px;margin-right:15px;display:block"></div>
         <div class="weui-cell__bd">
-            <p>宠物病例</p>
+            <p>宠物病历</p>
         </div>
         <div class="weui-cell__ft"></div>
     </a>
-    <a class="weui-cell weui-cell_access" href="/Home/Index/InspectionReport">
+
+	<if condition="$info['isexamine'] eq '1'">
+    	<a class="weui-cell weui-cell_access will_redirect" href="/WxInspection/inspectionReport?regcode={$_GET['regcode']}&regname={$_GET['regname']}&consumermid={$_GET['consumermid']}&wxid={$_GET['wxid']}&ismulti={$_GET['ismulti']}">
+    <else />
+    	<a class="weui-cell weui-cell_access" href="javascript:show_alert_msg('{$Think.get.regname}尚未开通该功能');">
+    </if>
         <div class="weui-cell__hd"><img src="/Public/images/icon_pp_jianyan.png" alt="" style="width:20px;margin-right:15px;display:block"></div>
         <div class="weui-cell__bd">
             <p>检验报告</p>
         </div>
         <div class="weui-cell__ft"></div>
     </a>
-    <a class="weui-cell weui-cell_access" href="/Home/Index/PurchaseHistory">
+
+    <if condition="$info['isbill'] eq '1'">
+    	<a class="weui-cell weui-cell_access will_redirect" href="/WxPurchase/purchaseHistory?regcode={$_GET['regcode']}&regname={$_GET['regname']}&consumermid={$_GET['consumermid']}&wxid={$_GET['wxid']}&ismulti={$_GET['ismulti']}">
+    <else />
+    	<a class="weui-cell weui-cell_access" href="javascript:show_alert_msg('{$Think.get.regname}尚未开通该功能');">
+    </if>
         <div class="weui-cell__hd"><img src="/Public/images/icon_pp_moneylist.png" alt="" style="width:20px;margin-right:15px;display:block"></div>
         <div class="weui-cell__bd">
             <p>消费记录</p>
         </div>
         <div class="weui-cell__ft"></div>
     </a>
-    <a class="weui-cell weui-cell_access" href="/Home/Index/ConsumptionStatistics">
-        <div class="weui-cell__hd"><img src="/Public/images/icon_pp_moneycount.png" alt="" style="width:20px;margin-right:15px;display:block"></div>
-        <div class="weui-cell__bd">
-            <p>消费统计</p>
-        </div>
-        <div class="weui-cell__ft"></div>
-    </a>
 </div>
+<div class="alert_msg"></div>
+<script type="text/javascript">
+	// --------------------------------------------------
+	// 功能函数：弹出提示框
+	var show_alert_msg = (function(){
+		var timer = null;
+		var $alert_msg = $('.alert_msg');
+
+		return function (msg) {
+			$alert_msg.text(msg);
+			if (timer) {
+				clearTimeout(timer);
+				$alert_msg.removeClass('active');
+			}
+			$alert_msg.addClass('active');
+			timer = setTimeout(function() {
+				$alert_msg.removeClass('active');
+			}, 3000);
+		};
+	}());
+
+</script>

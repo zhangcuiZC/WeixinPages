@@ -71,110 +71,67 @@
 		账单详情
 	</div>
 	<div class="pc_hospital">
-		全心全意动物医院（北辰店）
-		<a href="/Home/Index/ChooseHospital" class="weui-btn weui-btn_mini weui-btn_primary" style="float: right;margin-top: 7px;">更换</a>
+		{$_GET['regname']}
+		<if condition="$_GET['ismulti'] neq ''">
+			<a href="/WxPersonalCenter/chooseHospital?type=BILL&wxid={$_GET['wxid']}" class="weui-btn weui-btn_mini weui-btn_primary will_redirect">更换</a>
+		</if>
 	</div>
 </div>
 <div class="phd_page page">
+
 	<div class="weui-panel pcd_pet_title">
 		<div class="weui-panel__bd">
 			<div class="weui-media-box weui-media-box_text">
-				<h4 class="weui-media-box__title">消费总额<span class="phd_num" style="float: right;font-size: 16px;">￥100</span></h4>
-				<p class="weui-media-box__desc">2017/09/09（周三）&nbsp;&nbsp;&nbsp;&nbsp;宠物：嘟嘟</p>
+				<h4 class="weui-media-box__title">消费总额<span class="phd_num" style="float: right;font-size: 16px;">￥{$_GET['payprice']}</span></h4>
+				<p class="weui-media-box__desc">{$_GET['paytime']}（<?php $w=date('w',strtotime($_GET['paytime']));$weekArr=array("周日","周一","周二","周三","周四","周五","周六");echo $weekArr[$w]; ?>）&nbsp;&nbsp;&nbsp;&nbsp;宠物：{$_GET['petname']}</p>
 			</div>
 		</div>
+	</div>
+	
+	<volist name="datas" id="vo1">
+		<div class="weui-cells__title">{$key}（<?php $w=date('w',strtotime($key));$weekArr=array("周日","周一","周二","周三","周四","周五","周六");echo $weekArr[$w]; ?>）</div>
+		<div class="weui-panel" style="margin-top: 0;">
+			<div class="weui-panel__bd">
+				<div class="weui-media-box weui-media-box_text">
+					<volist name="vo1" id="vo2">
+						<table class="phd_table">
+							<tbody>
+								<tr class="phd_table_head">
+									<td width="50%">{$key==0 ? '挂号类' : (
+													 $key==1 ? '处方类' : (
+													 $key==2 ? '检验类' : (
+													 $key==3 ? '处置类' : (
+													 $key==4 ? '手术类' : (
+													 $key==5 ? '住院每日' : (
+													 $key==6 ? '疫苗类' : (
+													 $key==7 ? '美容类' : (
+													 $key==8 ? '商品类' : (
+													 $key==9 ? '寄养类' : (
+													 $key==10? '影像检查类' : (
+													 $key==11? '零售类' : '未知类')))))))))))}消费</td>
+									<td width="10%">数量</td>
+									<td width="20%">折后单价</td>
+									<td width="20%">实付总价</td>
+								</tr>
+								<volist name="vo2" id="vo3">
+									<tr>
+										<td><div>{$vo3['CommodityName']}</div></td>
+										<td>{$vo3['Quantity']}</td>
+										<td>￥{$vo3['PayPrice']}</td>
+										<td><span class="phd_num">￥{$vo3['PayPrice']*$vo3['Quantity']}</span></td>
+									</tr>
+								</volist>
+							</tbody>
+						</table>
+					</volist>
+				</div>
+			</div>
+		</div>
+	</volist>
+
+	<div class="weui-loadmore nomore_detail">
+	    <span class="weui-loadmore__tips">无更多数据</span>
 	</div>
 
-	<div class="weui-cells__title">09-02（周一）</div>
-	<div class="weui-panel" style="margin-top: 0;">
-		<div class="weui-panel__bd">
-			<div class="weui-media-box weui-media-box_text">
-				<table class="phd_table">
-					<tbody>
-						<tr class="phd_table_head">
-							<td width="60%">处方类消费</td>
-							<td width="20%">数量</td>
-							<td width="20%">实付</td>
-						</tr>
-						<tr>
-							<td><div>并氨基酸转化并氨基酸转化并氨基酸转化并氨基酸转化</div></td>
-							<td>10<span class="up">↑</span></td>
-							<td><span class="phd_num">￥100</span></td>
-						</tr>
-						<tr>
-							<td>并氨基酸转化</td>
-							<td>10<span class="up">↑</span></td>
-							<td><span class="phd_num">￥100</span></td>
-						</tr>
-					</tbody>
-				</table>
-				<table class="phd_table">
-					<tbody>
-						<tr class="phd_table_head">
-							<td width="60%">商品类消费</td>
-							<td width="20%">数量</td>
-							<td width="20%">实付</td>
-						</tr>
-						<tr>
-							<td><div>并氨基酸转化并氨基酸转化并氨基酸转化并氨基酸转化</div></td>
-							<td>10<span class="up">↑</span></td>
-							<td><span class="phd_num">￥100</span></td>
-						</tr>
-						<tr>
-							<td>并氨基酸转化</td>
-							<td>10<span class="up">↑</span></td>
-							<td><span class="phd_num">￥100</span></td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-		</div>
-	</div>
-
-	<div class="weui-cells__title">09-02（周一）</div>
-	<div class="weui-panel" style="margin-top: 0;">
-		<div class="weui-panel__bd">
-			<div class="weui-media-box weui-media-box_text">
-				<table class="phd_table">
-					<tbody>
-						<tr class="phd_table_head">
-							<td width="60%">处方类消费</td>
-							<td width="20%">数量</td>
-							<td width="20%">实付</td>
-						</tr>
-						<tr>
-							<td><div>并氨基酸转化并氨基酸转化并氨基酸转化并氨基酸转化</div></td>
-							<td>10<span class="up">↑</span></td>
-							<td><span class="phd_num">￥100</span></td>
-						</tr>
-						<tr>
-							<td>并氨基酸转化</td>
-							<td>10<span class="up">↑</span></td>
-							<td><span class="phd_num">￥100</span></td>
-						</tr>
-					</tbody>
-				</table>
-				<table class="phd_table">
-					<tbody>
-						<tr class="phd_table_head">
-							<td width="60%">商品类消费</td>
-							<td width="20%">数量</td>
-							<td width="20%">实付</td>
-						</tr>
-						<tr>
-							<td><div>并氨基酸转化并氨基酸转化并氨基酸转化并氨基酸转化</div></td>
-							<td>10<span class="up">↑</span></td>
-							<td><span class="phd_num">￥100</span></td>
-						</tr>
-						<tr>
-							<td>并氨基酸转化</td>
-							<td>10<span class="up">↑</span></td>
-							<td><span class="phd_num">￥100</span></td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-		</div>
-	</div>
-	<div style="width: 100%;height: 1px;margin-top: 30px;"></div>
+	
 </div>
