@@ -43,7 +43,7 @@
 
 	<div class="weui-panel petc_selector petc_selector_fixed">
 		<div class="weui-panel__bd" style="padding-right: 15px;">
-			<p style="text-align: center;"><span class="petc_date petc_date_start"><?php echo ($_GET['starttime']?:'2017-06-20'); ?></span>&nbsp;&nbsp;&nbsp;至&nbsp;&nbsp;&nbsp;<span class="petc_date petc_date_end"><?php echo ($_GET['endtime']?:'2017-06-23'); ?></span></p>
+			<p style="text-align: center;"><span class="petc_date petc_date_start"><?php echo ($_GET['starttime']?:'2017/06/20'); ?></span>&nbsp;&nbsp;&nbsp;至&nbsp;&nbsp;&nbsp;<span class="petc_date petc_date_end"><?php echo ($_GET['endtime']?:'2017/06/23'); ?></span></p>
 		</div>
 	</div>
 	<div class="page_navbar page_navbar_fixed">
@@ -71,17 +71,23 @@
 			</tbody>
 		</table>
 		<div class="date_quickpick">
-			<span>
-				<button>前日</button>
-				<button class="active">昨日</button>
-				<button>本月</button>
-			</span>
+			<?php if($_GET['starttime'] == ''): ?><span>
+					<button>前日</button>
+					<button class="active">昨日</button>
+					<button>本月</button>
+				</span>
+			<?php else: ?>
+				<span>
+					<button>昨日</button>
+					<button class="active"><?php echo (substr($_GET['starttime'],5)); ?>-<?php echo (substr($_GET['endtime'],5)); ?></button>
+					<button>本月</button>
+				</span><?php endif; ?>
 		</div>
 	</div>
 
 	<div class="weui-panel petc_selector petc_selector_position">
 		<div class="weui-panel__bd" style="padding-right: 15px;">
-			<p style="text-align: center;"><span class="petc_date petc_date_start"><?php echo ($_GET['starttime']?:'2017-06-20'); ?></span>&nbsp;&nbsp;&nbsp;至&nbsp;&nbsp;&nbsp;<span class="petc_date petc_date_end"><?php echo ($_GET['endtime']?:'2017-06-23'); ?></span></p>
+			<p style="text-align: center;"><span class="petc_date petc_date_start"><?php echo ($_GET['starttime']?:'2017/06/20'); ?></span>&nbsp;&nbsp;&nbsp;至&nbsp;&nbsp;&nbsp;<span class="petc_date petc_date_end"><?php echo ($_GET['endtime']?:'2017/06/23'); ?></span></p>
 		</div>
 	</div>
 
@@ -222,7 +228,7 @@
 										<td width="20%">数量</td>
 										<td width="30%">金额(元）</td>
 									</tr>
-									<?php $__FOR_START_1964259108__=1;$__FOR_END_1964259108__=11;for($i=$__FOR_START_1964259108__;$i < $__FOR_END_1964259108__;$i+=1){ ?><tr>
+									<?php $__FOR_START_1203258865__=1;$__FOR_END_1203258865__=11;for($i=$__FOR_START_1203258865__;$i < $__FOR_END_1203258865__;$i+=1){ ?><tr>
 											<td><?php echo ($i); ?></td>
 											<td>皇家幼年犬粮舒化奶糕皇家幼年犬粮舒化奶糕</td>
 											<td>80</td>
@@ -233,7 +239,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="click_load">加载更多</div>
+				<div class="click_load weui-cell_access">加载更多</div>
 
 			</div>
 		</div>
@@ -256,7 +262,7 @@
 										<td width="20%">入库数</td>
 										<td width="30%">金额(元）</td>
 									</tr>
-									<?php $__FOR_START_1200581650__=1;$__FOR_END_1200581650__=11;for($i=$__FOR_START_1200581650__;$i < $__FOR_END_1200581650__;$i+=1){ ?><tr>
+									<?php $__FOR_START_1912933994__=1;$__FOR_END_1912933994__=11;for($i=$__FOR_START_1912933994__;$i < $__FOR_END_1912933994__;$i+=1){ ?><tr>
 											<td><?php echo ($i); ?></td>
 											<td>皇家幼年犬粮舒化奶糕皇家幼年犬粮舒化奶糕</td>
 											<td>80</td>
@@ -267,7 +273,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="click_load">加载更多</div>
+				<div class="click_load weui-cell_access">加载更多</div>
 
 			</div>
 		</div>
@@ -277,7 +283,7 @@
 	<!-- nav 3 -->
 	<div class="page_navcontent" style="display: none;">
 		<div class="page_item" style="padding: 0;padding-top: 10px;overflow: auto;">
-			<?php $__FOR_START_1424845799__=1;$__FOR_END_1424845799__=11;for($i=$__FOR_START_1424845799__;$i < $__FOR_END_1424845799__;$i+=1){ ?><div class="hospital_employee">
+			<?php $__FOR_START_1131539538__=1;$__FOR_END_1131539538__=11;for($i=$__FOR_START_1131539538__;$i < $__FOR_END_1131539538__;$i+=1){ ?><div class="hospital_employee">
 					<div class="he_icon"><div class="he_num"><?php echo ($i); ?></div><img src="/Public/images/touxiang_yuangong@2x.png"></div>
 					<div class="he_name">王美美</div>
 					<div class="he_job">院长</div>
@@ -383,7 +389,7 @@
 <script type="text/javascript">
 	// 添加标签页hash
 	if (!window.location.hash) {
-		history.pushState(null, null, '#p=0');
+		history.replaceState(null, null, '#p=0');
 	}
 
 	// 横向柱状图动画
@@ -412,9 +418,9 @@
 		});
 	}
 $(function() {
-	// ---------selector_zc.js-加载选择器
-	var startTime = "2017-06-20";
-	var endTime = "2017-06-23";
+	// selector_work_zc.js-加载选择器
+	var startTime = "2017/06/20";
+	var endTime = "2017/06/23";
 	setup_selector(startTime, endTime);
 
 	// 返回切换标签页功能实现

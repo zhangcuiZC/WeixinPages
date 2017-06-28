@@ -31,14 +31,14 @@
 
 <div class="page_fixed">
 	<div class="page_header">
-		<a class="page_header_left will_redirect" href="#">返回</a>
+		<!-- <a class="page_header_left will_redirect" href="#">返回</a> -->
 		李亚雷
 		<a class="page_header_right" href="#"></a>
 	</div>
 
 	<div class="weui-panel petc_selector petc_selector_fixed">
 		<div class="weui-panel__bd" style="padding-right: 15px;">
-			<p style="text-align: center;"><span class="petc_date petc_date_start">2022-12-02</span>&nbsp;&nbsp;&nbsp;至&nbsp;&nbsp;&nbsp;<span class="petc_date petc_date_end">2022-12-12</span></p>
+			<p style="text-align: center;"><span class="petc_date petc_date_start"><?php echo ($_GET['starttime']?:'2017/06/20'); ?></span>&nbsp;&nbsp;&nbsp;至&nbsp;&nbsp;&nbsp;<span class="petc_date petc_date_end"><?php echo ($_GET['endtime']?:'2017/06/23'); ?></span></p>
 		</div>
 	</div>
 </div>
@@ -60,17 +60,23 @@
 			</tbody>
 		</table>
 		<div class="date_quickpick">
-			<span>
-				<button>前日</button>
-				<button class="active">昨日</button>
-				<button>本月</button>
-			</span>
+			<?php if($_GET['starttime'] == ''): ?><span>
+					<button>前日</button>
+					<button class="active">昨日</button>
+					<button>本月</button>
+				</span>
+			<?php else: ?>
+				<span>
+					<button>昨日</button>
+					<button class="active"><?php echo (substr($_GET['starttime'],5)); ?>-<?php echo (substr($_GET['endtime'],5)); ?></button>
+					<button>本月</button>
+				</span><?php endif; ?>
 		</div>
 	</div>
 	
 	<div class="weui-panel petc_selector petc_selector_position">
 		<div class="weui-panel__bd" style="padding-right: 15px;">
-			<p style="text-align: center;"><span class="petc_date petc_date_start">2022-12-02</span>&nbsp;&nbsp;&nbsp;至&nbsp;&nbsp;&nbsp;<span class="petc_date petc_date_end">2022-12-12</span></p>
+			<p style="text-align: center;"><span class="petc_date petc_date_start"><?php echo ($_GET['starttime']?:'2017/06/20'); ?></span>&nbsp;&nbsp;&nbsp;至&nbsp;&nbsp;&nbsp;<span class="petc_date petc_date_end"><?php echo ($_GET['endtime']?:'2017/06/23'); ?></span></p>
 		</div>
 	</div>
 
@@ -151,7 +157,7 @@
 			</span>
 		</div>
 		<div class="item_content" style="padding-top: 0">
-			<?php $__FOR_START_874205274__=1;$__FOR_END_874205274__=5;for($i=$__FOR_START_874205274__;$i < $__FOR_END_874205274__;$i+=1){ ?><div class="weui-cell weui-cell_access">
+			<?php $__FOR_START_1290011812__=1;$__FOR_END_1290011812__=5;for($i=$__FOR_START_1290011812__;$i < $__FOR_END_1290011812__;$i+=1){ ?><div class="weui-cell weui-cell_access">
 		        <div class="weui-cell__bd">
 		            <p><span class="item_date">2017/05/04</span> (<span class="item_num">10</span>) 项提成</p>
 		        </div>
@@ -192,7 +198,7 @@
 			    </div>
 		    </div><?php } ?>
 		    <div class="seperator_line"></div>
-		    <div class="click_load">加载更多</div>
+		    <div class="click_load weui-cell_access">加载更多</div>
 		</div><!-- item_content end -->
 	</div>
 
@@ -207,7 +213,7 @@
 			</span>
 		</div>
 		<div class="item_content" style="padding-top: 0">
-			<?php $__FOR_START_1225350903__=1;$__FOR_END_1225350903__=5;for($i=$__FOR_START_1225350903__;$i < $__FOR_END_1225350903__;$i+=1){ ?><div class="weui-cell weui-cell_access">
+			<?php $__FOR_START_819010967__=1;$__FOR_END_819010967__=5;for($i=$__FOR_START_819010967__;$i < $__FOR_END_819010967__;$i+=1){ ?><div class="weui-cell weui-cell_access">
 		        <div class="weui-cell__bd">
 		            <p><span class="item_date">2017/05/04</span> (<span class="item_num">10</span>) 项提成</p>
 		        </div>
@@ -248,13 +254,13 @@
 			    </div>
 		    </div><?php } ?>
 		    <div class="seperator_line"></div>
-		    <div class="click_load">加载更多</div>
+		    <div class="click_load weui-cell_access">加载更多</div>
 		</div><!-- item_content end -->
 	</div>
 	<p class="bottom_msg">到底啦~</p>
 </div>
 
-<script type="text/javascript" src="/Public/javascripts/selector_work_zc.js?v=1"></script>
+<script type="text/javascript" src="/Public/javascripts/selector_work_zc.js?v=2"></script>
 <script type="text/javascript">
 	// 横向柱状图动画
 	window.onload = show_percent_bar;
@@ -277,11 +283,10 @@
 		});
 	}
 $(function() {
-	// ---------selector_zc.js-加载选择器
-	var startTime = "2017-06-20";
-	var endTime = "2017-06-23";
-	var this_url = window.location.pathname + window.location.hash + (window.location.search ? (window.location.search + '&') : '?');
-	setup_selector(this_url, startTime, endTime);
+	// selector_work_zc.js-加载选择器
+	var startTime = "2017/06/20";
+	var endTime = "2017/06/23";
+	setup_selector(startTime, endTime);
 
 	// 点击展开详情
 	$('.weui-cell').click(function(event) {
@@ -399,7 +404,7 @@ $(function() {
 	            clockwise: false,
 	            label: {
 	            	normal: {
-	            		formatter: '￥{c}\n{b}'
+	            		formatter: '{c}单\n{b}'
 	            	},
 	            	emphasis: {
 	            		formatter : '{d}%\n{b}'

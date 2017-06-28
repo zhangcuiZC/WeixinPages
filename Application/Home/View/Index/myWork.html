@@ -18,14 +18,14 @@
 
 <div class="page_fixed">
 	<div class="page_header">
-		<a class="page_header_left will_redirect" href="#">返回</a>
+		<!-- <a class="page_header_left will_redirect" href="#">返回</a> -->
 		李亚雷
 		<a class="page_header_right" href="#"></a>
 	</div>
 
 	<div class="weui-panel petc_selector petc_selector_fixed">
 		<div class="weui-panel__bd" style="padding-right: 15px;">
-			<p style="text-align: center;"><span class="petc_date petc_date_start">{$_GET['starttime']?:'2017-06-20'}</span>&nbsp;&nbsp;&nbsp;至&nbsp;&nbsp;&nbsp;<span class="petc_date petc_date_end">{$_GET['endtime']?:'2017-06-23'}</span></p>
+			<p style="text-align: center;"><span class="petc_date petc_date_start">{$_GET['starttime']?:'2017/06/20'}</span>&nbsp;&nbsp;&nbsp;至&nbsp;&nbsp;&nbsp;<span class="petc_date petc_date_end">{$_GET['endtime']?:'2017/06/23'}</span></p>
 		</div>
 	</div>
 </div>
@@ -47,17 +47,25 @@
 			</tbody>
 		</table>
 		<div class="date_quickpick">
-			<span>
-				<button>前日</button>
-				<button class="active">昨日</button>
-				<button>本月</button>
-			</span>
+			<if condition="$_GET['starttime'] eq ''">
+				<span>
+					<button>前日</button>
+					<button class="active">昨日</button>
+					<button>本月</button>
+				</span>
+			<else />
+				<span>
+					<button>昨日</button>
+					<button class="active">{$_GET['starttime']|substr=5}-{$_GET['endtime']|substr=5}</button>
+					<button>本月</button>
+				</span>
+			</if>
 		</div>
 	</div>
 	
 	<div class="weui-panel petc_selector petc_selector_position">
 		<div class="weui-panel__bd" style="padding-right: 15px;">
-			<p style="text-align: center;"><span class="petc_date petc_date_start">{$_GET['starttime']?:'2017-06-20'}</span>&nbsp;&nbsp;&nbsp;至&nbsp;&nbsp;&nbsp;<span class="petc_date petc_date_end">{$_GET['endtime']?:'2017-06-23'}</span></p>
+			<p style="text-align: center;"><span class="petc_date petc_date_start">{$_GET['starttime']?:'2017/06/20'}</span>&nbsp;&nbsp;&nbsp;至&nbsp;&nbsp;&nbsp;<span class="petc_date petc_date_end">{$_GET['endtime']?:'2017/06/23'}</span></p>
 		</div>
 	</div>
 
@@ -181,7 +189,7 @@
 		    </div>
 		    </for>
 		    <div class="seperator_line"></div>
-		    <div class="click_load">加载更多</div>
+		    <div class="click_load weui-cell_access">加载更多</div>
 		</div><!-- item_content end -->
 	</div>
 
@@ -239,7 +247,7 @@
 		    </div>
 		    </for>
 		    <div class="seperator_line"></div>
-		    <div class="click_load">加载更多</div>
+		    <div class="click_load weui-cell_access">加载更多</div>
 		</div><!-- item_content end -->
 	</div>
 	<p class="bottom_msg">到底啦~</p>
@@ -268,9 +276,9 @@
 		});
 	}
 $(function() {
-	// ---------selector_zc.js-加载选择器
-	var startTime = "2017-06-20";
-	var endTime = "2017-06-23";
+	// selector_work_zc.js-加载选择器
+	var startTime = "2017/06/20";
+	var endTime = "2017/06/23";
 	setup_selector(startTime, endTime);
 
 	// 点击展开详情
@@ -389,7 +397,7 @@ $(function() {
 	            clockwise: false,
 	            label: {
 	            	normal: {
-	            		formatter: '￥{c}\n{b}'
+	            		formatter: '{c}单\n{b}'
 	            	},
 	            	emphasis: {
 	            		formatter : '{d}%\n{b}'

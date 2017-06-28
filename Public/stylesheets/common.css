@@ -503,8 +503,8 @@ input::-webkit-input-placeholder {
 	transform: rotateZ(0deg);
 }
 .pcds_detail{
-	background-color: #f5f5f9;
-	padding-bottom: 1px;
+	/*background-color: #f5f5f9;*/
+	/*padding-bottom: 1px;*/
 	position: relative;
 }
 .pcds_detail_box{
