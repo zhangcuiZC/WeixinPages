@@ -1,18 +1,17 @@
-function Loading_work_zc(triggerObj_str, isleft_bool, post_data_json, create_html_func, create_tr_func, url_str, last_date_str, format_fn) {
+function Loading_business_zc(triggerObj_str, isleft_bool, post_data_json, type_str, url_str, format_fn, pagenum_str) {
 	this.triggerObj_str = triggerObj_str;
 	this.triggerObj = $(triggerObj_str);
 	this.isleft = isleft_bool;
 	this.isloading = false;
 	this.url = url_str;
 	this.info = post_data_json;
-	this.create_html = create_html_func;
-	this.create_tr = create_tr_func;
-	this.last_date = last_date_str;
+	this.type = type_str;//'hot','pchs'
 	this.format = format_fn;
+	this.pagenum = +pagenum_str;
 }
 
-Loading_work_zc.prototype = {
-	constructor: Loading_work_zc,
+Loading_business_zc.prototype = {
+	constructor: Loading_business_zc,
 
 	load_more: function() {
 		this.triggerObj.html('加载更多');
@@ -27,8 +26,26 @@ Loading_work_zc.prototype = {
 	},
 
 	net_error: function() {
-		var _this = this;
 		this.triggerObj.html('<span class="weui-loadmore__tips">网络连接错误，点击重试</span>');
+	},
+
+	create_tr: function(datas) {
+		var html = '';
+		var name = 'name';
+		if (this.type === 'pchs') {
+			name = 'commodityname';
+		}
+
+		for (var i = 0; i < datas.length; i++) {
+			html += '<tr>' +
+						'<td>' + ((this.info.Page - 1) * this.pagenum + i + 1) + '</td>' +
+						'<td>' + datas[i][name] + '</td>' +
+						'<td>' + this.format((+datas[i].sumquantity).toFixed(0)) + '</td>' +
+						'<td>' + this.format((+datas[i].summoney).toFixed(2)) + '</td>' +
+					'</tr>';
+		}
+
+		return html;
 	},
 
 	fetch_by_ajax: function(url, info) {
@@ -67,33 +84,8 @@ Loading_work_zc.prototype = {
 					_this.isleft = false;
 				}
 
-				var first_date = Object.keys(data.datas)[0];
-				if (first_date === _this.last_date) {
-					var html_tr = _this.create_tr(data.datas[first_date]);
-					_this.triggerObj.parents('.item_content').find('.pcd_table').last().find('tbody').append(html_tr);
-					var $last_num_box = _this.triggerObj.parents('.item_content').find('.weui-cell__bd').last();
-					var prev_num = +$last_num_box.find('.item_num').text();
-					$last_num_box.find('.item_num').text(prev_num + data.datas[first_date].length);
-
-					var remain_commission = 0;
-					for (var i = 0; i < data.datas[first_date].length; i++) {
-						remain_commission += +(data.datas[first_date][i].commission);
-					}
-					var $last_money = _this.triggerObj.parents('.item_content').find('.item_num').last();
-					var last_money = +($last_money.text().slice(1).replace(',', ''));
-					$last_money.text('￥' + _this.format((remain_commission + last_money).toFixed(2)));
-					delete data.datas[first_date];
-				}
-
-				var html_table = _this.create_html(data.datas);
-
-				if (Object.keys(data.datas)[Object.keys(data.datas).length - 1]) {
-					_this.last_date = Object.keys(data.datas)[Object.keys(data.datas).length - 1];
-				}
-				console.log('lastdata',_this.last_date);
-				$(html_table).insertBefore(_this.triggerObj_str);
-
-
+				var html = _this.create_tr(data.datas);
+				_this.triggerObj.parents('.item_content').find('tbody').append(html);
 			},
 			error: function(xhr, status) {
 				if (status === 'timeout') {

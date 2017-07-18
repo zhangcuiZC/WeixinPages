@@ -1,4 +1,4 @@
-<layout name="layout/default" />
+<layout name="layout/work_default" />
 <script type="text/javascript" src="/Public/javascripts/echarts.min.js"></script>
 
 <style type="text/css">
@@ -14,22 +14,30 @@
 	.petc_selector_fixed{
 		box-shadow: 0 2px 5px 0px rgba(0,0,0,.2);
 	}
+	.item_content .weui-cell:before{
+		border: none;
+	}
 </style>
 
 <div class="page_fixed">
 	<div class="page_header">
 		<!-- <a class="page_header_left will_redirect" href="#">返回</a> -->
-		李亚雷
+		{$name}
 		<a class="page_header_right" href="#"></a>
 	</div>
 
 	<div class="weui-panel petc_selector petc_selector_fixed">
 		<div class="weui-panel__bd" style="padding-right: 15px;">
-			<p style="text-align: center;"><span class="petc_date petc_date_start">{$_GET['starttime']?:'2017/06/20'}</span>&nbsp;&nbsp;&nbsp;至&nbsp;&nbsp;&nbsp;<span class="petc_date petc_date_end">{$_GET['endtime']?:'2017/06/23'}</span></p>
+			<p style="text-align: center;"><span class="petc_date petc_date_start">{$begintime}</span>&nbsp;&nbsp;&nbsp;至&nbsp;&nbsp;&nbsp;<span class="petc_date petc_date_end">{$endtime}</span></p>
 		</div>
 	</div>
 </div>
-
+<?php
+	$total_activity = 0;
+	for ($i = 0; $i < count($summary['activityDatas']); $i++) {
+		$total_activity += $summary['activityDatas'][$i]['money'];
+	}
+?>
 <div class="mw_page page">
 	<div class="summary_info">
 		<table>
@@ -40,83 +48,68 @@
 					<td width="30%">提成 (元)</td>
 				</tr>
 				<tr>
-					<td style="font-size: 15px;">10</td>
-					<td style="font-size: 23px;">123993</td>
-					<td style="font-size: 15px;">5000</td>
+					<td style="font-size: 15px;">{$summary['allNum']}</td>
+					<td style="font-size: 23px;" class="total_activity">{$total_activity}</td>
+					<td style="font-size: 15px;" class="total_commission">{$summary['saleSumCommission']+$summary['serviceSumCommission']}</td>
 				</tr>
 			</tbody>
 		</table>
 		<div class="date_quickpick">
-			<if condition="$_GET['starttime'] eq ''">
-				<span>
-					<button>前日</button>
-					<button class="active">昨日</button>
-					<button>本月</button>
-				</span>
-			<else />
-				<span>
-					<button>昨日</button>
-					<button class="active">{$_GET['starttime']|substr=5}-{$_GET['endtime']|substr=5}</button>
-					<button>本月</button>
-				</span>
-			</if>
+			<span>
+				<button class="show_prev_month">上月</button>
+				<button class="active show_dby">前日</button>
+				<button class="show_this_month">本月</button>
+			</span>
+			<!-- <span>
+				<button class="show_dby">前日</button>
+				<button class="active"></button>
+				<button class="show_this_month">本月</button>
+			</span> -->
 		</div>
 	</div>
 	
 	<div class="weui-panel petc_selector petc_selector_position">
 		<div class="weui-panel__bd" style="padding-right: 15px;">
-			<p style="text-align: center;"><span class="petc_date petc_date_start">{$_GET['starttime']?:'2017/06/20'}</span>&nbsp;&nbsp;&nbsp;至&nbsp;&nbsp;&nbsp;<span class="petc_date petc_date_end">{$_GET['endtime']?:'2017/06/23'}</span></p>
+			<p style="text-align: center;"><span class="petc_date petc_date_start">{$begintime}</span>&nbsp;&nbsp;&nbsp;至&nbsp;&nbsp;&nbsp;<span class="petc_date petc_date_end">{$endtime}</span></p>
 		</div>
 	</div>
 
 	
-	<div class="page_item">
+	<div class="page_item activity_datas">
 		<div class="item_title">
 			<span class="left">
 				业绩额占比
 			</span>
 			<span class="right">
 				<span class="r_title">共计</span>
-				<span class="r_price">￥19999</span>
+				<span class="r_price">￥<?php echo number_format($total_activity, 2); ?></span>
 			</span>
 		</div>
 		<div class="item_content">
-			<div class="percent_bar">
-				<div class="title"><span class="left">挂号</span><span class="right">¥100.00</span></div>
-				<div class="bar">
-					<div class="innerbar"><div class="num">90%</div></div>
-				</div>
-			</div>
-			<div class="percent_bar">
-				<div class="title"><span class="left">处方</span><span class="right">¥1000.00</span></div>
-				<div class="bar">
-					<div class="innerbar"><div class="num">75%</div></div>
-				</div>
-			</div>
-			<div class="percent_bar">
-				<div class="title"><span class="left">请求</span><span class="right">¥100220.00</span></div>
-				<div class="bar">
-					<div class="innerbar"><div class="num">58%</div></div>
-				</div>
-			</div>
-			<div class="percent_bar">
-				<div class="title"><span class="left">分逢恶导非</span><span class="right">¥1000.00</span></div>
-				<div class="bar">
-					<div class="innerbar"><div class="num">32%</div></div>
-				</div>
-			</div>
-			<div class="percent_bar">
-				<div class="title"><span class="left">处方</span><span class="right">¥1000.00</span></div>
-				<div class="bar">
-					<div class="innerbar"><div class="num">18%</div></div>
-				</div>
-			</div>
-			<div class="percent_bar">
-				<div class="title"><span class="left">处方</span><span class="right">¥1000.00</span></div>
-				<div class="bar">
-					<div class="innerbar"><div class="num">2%</div></div>
-				</div>
-			</div>
+			<if condition="count($summary['activityDatas']) neq 0">
+				<volist name="summary['activityDatas']" id="vo">
+					<div class="percent_bar">
+						<div class="title"><span class="left">{$vo['activitytype'] == 0 ? '挂号' : 
+							($vo['activitytype'] == 1 ? '处方' : 
+							($vo['activitytype'] == 2 ? '检验' : 
+							($vo['activitytype'] == 3 ? '处置' : 
+							($vo['activitytype'] == 4 ? '手术' : 
+							($vo['activitytype'] == 5 ? '住院' : 
+							($vo['activitytype'] == 6 ? '疫苗驱虫' : 
+							($vo['activitytype'] == 7 ? '美容' : 
+							($vo['activitytype'] == 8 ? '商品' : 
+							($vo['activitytype'] == 9 ? '寄养' : 
+							($vo['activitytype'] == 10 ? '影像检验' : 
+							($vo['activitytype'] == 21 ? '计次卡充值' : 
+							($vo['activitytype'] == 22 ? '计次卡退款' : '其他'))))))))))))}</span><span class="right">¥<?php echo number_format($vo['money'], 2); ?></span></div>
+						<div class="bar">
+							<div class="innerbar"><div class="num"><?php echo round($vo['money']/$total_activity, 2)*100; ?>%</div></div>
+						</div>
+					</div>
+				</volist>
+			<else />
+				<span class="weui-loadmore__tips" style="margin: 15px 0 10px;">暂无数据</span>
+			</if>
 		</div>
 	</div>
 
@@ -127,7 +120,7 @@
 			</span>
 			<span class="right">
 				<span class="r_title">共计</span>
-				<span class="r_price" style="color: #EF5A4A">100单</span>
+				<span class="r_price all_num" style="color: #EF5A4A">{$summary['allNum']}单</span>
 			</span>
 		</div>
 		<div class="item_content" id="chart_box">
@@ -135,125 +128,149 @@
 		</div>
 	</div>
 
-	<div class="page_item">
+	<div class="page_item sale_list">
 		<div class="item_title">
 			<span class="left">
 				销售提成明细
 			</span>
 			<span class="right">
 				<span class="r_title">共计</span>
-				<span class="r_price" style="color: #EF5A4A">￥5000</span>
+				<span class="r_price" style="color: #EF5A4A">￥<?php echo number_format($summary['saleSumCommission'], 2); ?></span>
 			</span>
 		</div>
 		<div class="item_content" style="padding-top: 0">
-			<for start="1" end="5">
-			<div class="weui-cell weui-cell_access">
-		        <div class="weui-cell__bd">
-		            <p><span class="item_date">2017/05/04</span> (<span class="item_num">10</span>) 项提成</p>
-		        </div>
-		        <div class="weui-cell__ft"><span class="item_num">￥80.00</span><i class="arrow"></i></div>
-		    </div>
-		    <div class="pcds_detail_box">
-			    <div class="pcds_detail">
-					<div class="weui-panel pcd_pet_detail">
-						<div class="weui-panel__bd">
-							<div class="weui-media-box weui-media-box_text">
-								<table class="pcd_table">
-									<tbody>
-										<tr class="ird_table_head">
-											<td width="40%">项目</td>
-											<td width="16%">销售量</td>
-											<td width="22%">销售额</td>
-											<td width="22%">提成</td>
-										</tr>
-										
-											<tr>
-												<td>手术</td>
-												<td>2</td>
-												<td>800.00</td>
-												<td>20.00</td>
+			<volist name="summary['saleList']" id="vo">
+				<div class="weui-cell">
+			        <div class="weui-cell__bd">
+			            <p><span class="item_date">{$key}</span> (<span class="item_num"><?php echo count($vo); ?></span>) 项提成</p>
+			        </div>
+			        <?php
+						$sale_per_day = 0;
+						for ($i = 0; $i < count($vo); $i++) {
+							$sale_per_day += $vo[$i]['commission'];
+						}
+					?>
+			        <div class="weui-cell__ft"><span class="item_num">￥<?php echo number_format($sale_per_day, 2); ?></span></div>
+			    </div>
+			    <div class="pcds_detail_box">
+				    <div class="pcds_detail">
+						<div class="weui-panel pcd_pet_detail">
+							<div class="weui-panel__bd">
+								<div class="weui-media-box weui-media-box_text">
+									<table class="pcd_table">
+										<tbody>
+											<tr class="ird_table_head">
+												<td width="40%">项目</td>
+												<td width="16%">销售量</td>
+												<td width="22%">销售额</td>
+												<td width="22%">提成</td>
 											</tr>
-											<tr>
-												<td>1</td>
-												<td>2</td>
-												<td>3</td>
-												<td>4</td>
-											</tr>
-										
-									</tbody>
-								</table>
+											<volist name="vo" id="vo2">
+												<tr>
+													<td>{$vo2['name']}</td>
+													<td><?php echo number_format($vo2['quantity'], 1); ?></td>
+													<td><?php echo number_format($vo2['money'], 2); ?></td>
+													<td><?php echo number_format($vo2['commission'], 2); ?></td>
+												</tr>
+											</volist>
+										</tbody>
+									</table>
+								</div>
 							</div>
 						</div>
-					</div>
+				    </div>
 			    </div>
-		    </div>
-		    </for>
-		    <div class="seperator_line"></div>
-		    <div class="click_load weui-cell_access">加载更多</div>
+			</volist>
+
+			<if condition="count($summary['saleList']) neq 0">
+				<!-- <div class="seperator_line"></div> -->
+				<if condition="$summary['saleIsLeft'] eq false">
+					<div class="click_load">
+						<span class="weui-loadmore__tips">无更多数据</span>
+					</div>
+				<else />
+					<div class="click_load weui-cell_access">加载更多</div>
+				</if>
+			<else />
+				<span class="weui-loadmore__tips" style="margin: 15px 0 10px;">暂无数据</span>
+			</if>
 		</div><!-- item_content end -->
 	</div>
 
-	<div class="page_item">
+	<div class="page_item service_list">
 		<div class="item_title">
 			<span class="left">
 				服务提成明细
 			</span>
 			<span class="right">
 				<span class="r_title">共计</span>
-				<span class="r_price" style="color: #EF5A4A">￥500000</span>
+				<span class="r_price" style="color: #EF5A4A">￥<?php echo number_format($summary['serviceSumCommission'], 2); ?></span>
 			</span>
 		</div>
 		<div class="item_content" style="padding-top: 0">
-			<for start="1" end="5">
-			<div class="weui-cell weui-cell_access">
-		        <div class="weui-cell__bd">
-		            <p><span class="item_date">2017/05/04</span> (<span class="item_num">10</span>) 项提成</p>
-		        </div>
-		        <div class="weui-cell__ft"><span class="item_num">￥80.00</span><i class="arrow"></i></div>
-		    </div>
-		    <div class="pcds_detail_box">
-			    <div class="pcds_detail">
-					<div class="weui-panel pcd_pet_detail">
-						<div class="weui-panel__bd">
-							<div class="weui-media-box weui-media-box_text">
-								<table class="pcd_table">
-									<tbody>
-										<tr class="ird_table_head">
-											<td width="40%">项目</td>
-											<td width="16%">销售量</td>
-											<td width="22%">销售额</td>
-											<td width="22%">提成</td>
-										</tr>
-										
-											<tr>
-												<td>手术</td>
-												<td>2</td>
-												<td>800.00</td>
-												<td>20.00</td>
+			<volist name="summary['serviceList']" id="vo">
+				<div class="weui-cell">
+			        <div class="weui-cell__bd">
+			            <p><span class="item_date">{$key}</span> (<span class="item_num"><?php echo count($vo); ?></span>) 项提成</p>
+			        </div>
+					<?php
+						$service_per_day = 0;
+						for ($i = 0; $i < count($vo); $i++) {
+							$service_per_day += $vo[$i]['commission'];
+						}
+					?>
+			        <div class="weui-cell__ft"><span class="item_num">￥<?php echo number_format($service_per_day, 2); ?></span></div>
+			    </div>
+			    <div class="pcds_detail_box">
+				    <div class="pcds_detail">
+						<div class="weui-panel pcd_pet_detail">
+							<div class="weui-panel__bd">
+								<div class="weui-media-box weui-media-box_text">
+									<table class="pcd_table">
+										<tbody>
+											<tr class="ird_table_head">
+												<td width="40%">项目</td>
+												<td width="16%">销售量</td>
+												<td width="22%">销售额</td>
+												<td width="22%">提成</td>
 											</tr>
-											<tr>
-												<td>1</td>
-												<td>2</td>
-												<td>3</td>
-												<td>4</td>
-											</tr>
-										
-									</tbody>
-								</table>
+											<volist name="vo" id="vo2">
+												<tr>
+													<td>{$vo2['name']}</td>
+													<td><?php echo number_format($vo2['quantity'], 1); ?></td>
+													<td><?php echo number_format($vo2['money'], 2); ?></td>
+													<td><?php echo number_format($vo2['commission'], 2); ?></td>
+												</tr>
+											</volist>
+										</tbody>
+									</table>
+								</div>
 							</div>
 						</div>
-					</div>
+				    </div>
 			    </div>
-		    </div>
-		    </for>
-		    <div class="seperator_line"></div>
-		    <div class="click_load weui-cell_access">加载更多</div>
+			</volist>
+			
+			<if condition="count($summary['serviceList']) neq 0">
+			    <!-- <div class="seperator_line"></div> -->
+			    <if condition="$summary['serviceIsLeft'] eq false">
+			    	<div class="click_load">
+			    		<span class="weui-loadmore__tips">无更多数据</span>
+			    	</div>
+			    <else />
+			    	<div class="click_load weui-cell_access">加载更多</div>
+			    </if>
+			<else />
+				<span class="weui-loadmore__tips" style="margin: 15px 0 10px;">暂无数据</span>
+			</if>
 		</div><!-- item_content end -->
 	</div>
 	<p class="bottom_msg">到底啦~</p>
 </div>
 
-<script type="text/javascript" src="/Public/javascripts/selector_work_zc.js?v=2"></script>
+<script type="text/javascript" src="/Public/javascripts/selector_work_zc.js?t={:time()}"></script>
+<script type="text/javascript" src="/Public/javascripts/loading_work_zc.js?t={:time()}"></script>
+<script type="text/javascript" src="/Public/javascripts/utils_zc.js?t={:time()}"></script>
 <script type="text/javascript">
 	// 横向柱状图动画
 	window.onload = show_percent_bar;
@@ -277,104 +294,433 @@
 	}
 $(function() {
 	// selector_work_zc.js-加载选择器
-	var startTime = "2017/06/20";
-	var endTime = "2017/06/23";
-	setup_selector(startTime, endTime);
+	var startTime = "{$begintime}";
+	var endTime = "{$endtime}";
+	setup_selector(ajax_get_all_data);
 
-	// 点击展开详情
-	$('.weui-cell').click(function(event) {
-		var $detail_box = $(this).next('.pcds_detail_box');
-		$(this).toggleClass('active');
-		$detail_box.toggleClass('active');
-	});
+	function create_activity_data(data) {
+		var html = '';
+		var total_activity = 0;
+		for (var i = 0; i < data.length; i++) {
+			total_activity += parseFloat(data[i].money, 2);
+		}
+
+		if (!data.length) {
+			html =  '<div class="item_title">' +
+						'<span class="left">' +
+							'业绩额占比' + 
+						'</span>' +
+						'<span class="right">' +
+							'<span class="r_title">共计</span>' +
+							'<span class="r_price">￥0.00</span>' +
+						'</span>' +
+					'</div>' +
+					'<div class="item_content">' +
+						'<span class="weui-loadmore__tips" style="margin: 15px 0 10px;">暂无数据</span>' +
+					'</div>';
+		}else {
+			html += '<div class="item_content">';
+			for (var i = 0; i < data.length; i++) {
+				html += '<div class="percent_bar">' +
+							'<div class="title">' +
+								'<span class="left">' +
+									(data[i]['activitytype'] == 0 ? '挂号' : 
+									(data[i]['activitytype'] == 1 ? '处方' : 
+									(data[i]['activitytype'] == 2 ? '检验' : 
+									(data[i]['activitytype'] == 3 ? '处置' : 
+									(data[i]['activitytype'] == 4 ? '手术' : 
+									(data[i]['activitytype'] == 5 ? '住院' : 
+									(data[i]['activitytype'] == 6 ? '疫苗驱虫' : 
+									(data[i]['activitytype'] == 7 ? '美容' : 
+									(data[i]['activitytype'] == 8 ? '商品' : 
+									(data[i]['activitytype'] == 9 ? '寄养' : 
+									(data[i]['activitytype'] == 10 ? '影像检验' : 
+									(data[i]['activitytype'] == 21 ? '计次卡充值' : 
+									(data[i]['activitytype'] == 22 ? '计次卡退款' : '其他'))))))))))))) +
+								'</span>' +
+								'<span class="right">¥' + thousand_separator(parseFloat(data[i].money, 2).toFixed(2)) + '</span>' +
+							'</div>' +
+							'<div class="bar">' +
+								'<div class="innerbar"><div class="num">' + (parseFloat(data[i].money/total_activity, 2)*100).toFixed(0) + '%</div></div>' +
+							'</div>' +
+						'</div>';
+			}
+			html = '<div class="item_title">' +
+						'<span class="left">' +
+							'业绩额占比' + 
+						'</span>' +
+						'<span class="right">' +
+							'<span class="r_title">共计</span>' +
+							'<span class="r_price">￥' + thousand_separator(parseFloat(total_activity, 2).toFixed(2)) + '</span>' +
+						'</span>' +
+					'</div>' + html + '</div>';
+		}
+
+
+		$('.activity_datas').html(html);
+		$('.total_activity').text(parseFloat(total_activity, 2).toFixed(2));
+		setTimeout(function() {
+			show_percent_bar();
+		}, 100);
+	}
+
+	function modify_chart_data(data) {
+		series_data_base[0].value = data.clincNum;
+		series_data_base[1].value = data.fosterNum;
+		series_data_base[2].value = data.beautyNum;
+		series_data_base[3].value = data.hospitalNum;
+		series_data_base[4].value = data.protectionNum;
+
+		legend_data_base[0].value = data.clincNum;
+		legend_data_base[1].value = data.fosterNum;
+		legend_data_base[2].value = data.beautyNum;
+		legend_data_base[3].value = data.hospitalNum;
+		legend_data_base[4].value = data.protectionNum;
+
+		series_data = sort_series_data(series_data_base);
+		legend_data = clone_obj(legend_data_base).sort(function(a, b) { return b.value - a.value; });
+
+		option.legend.data = legend_data;
+		option.series[0].data = series_data;
+
+		var myChart = echarts.init(document.getElementById('chart_box'));
+		myChart.setOption(option);
+		$('.all_num').text(data.allNum + '单');
+	}
+
+	function create_inner_tr(data) {
+		var html = '';
+		for (var i = 0; i < data.length; i++) {
+			html += '<tr>' +
+						'<td>' + data[i].name + '</td>' +
+						'<td>' + (+data[i].quantity).toFixed(1) + '</td>' +
+						'<td>' + thousand_separator((+data[i].money).toFixed(2)) + '</td>' +
+						'<td>' + thousand_separator((+data[i].commission).toFixed(2)) + '</td>' +
+					'</tr>';
+		}
+		return html;		
+	}
+
+	function create_list(all_data, type) {
+		var data, isLeft, title, sumCommission, $htmlBox;
+		if (type === 'sale') {
+			data = all_data.saleList;
+			isLeft = all_data.saleIsLeft;
+			title = '销售提成明细';
+			sumCommission = thousand_separator((+all_data.saleSumCommission).toFixed(2));
+			$htmlBox = $('.sale_list');
+		}else if (type === 'service') {
+			data = all_data.serviceList;
+			isLeft = all_data.serviceIsLeft;
+			title = '服务提成明细';
+			sumCommission = thousand_separator((+all_data.serviceSumCommission).toFixed(2));
+			$htmlBox = $('.service_list');
+
+			$('.total_commission').text(thousand_separator(((+all_data.saleSumCommission) + (+all_data.serviceSumCommission)).toFixed(2)));
+		}else {
+			return '';
+		}
+		
+		var html = '';
+
+		if (!Object.keys(data).length) {
+			html =  '<div class="item_title">' +
+						'<span class="left">' +
+							title + 
+						'</span>' +
+						'<span class="right">' +
+							'<span class="r_title">共计</span>' +
+							'<span class="r_price" style="color: #EF5A4A">￥0.00</span>' +
+						'</span>' +
+					'</div>' +
+					'<div class="item_content">' +
+						'<span class="weui-loadmore__tips" style="margin: 15px 0 10px;">暂无数据</span>' +
+					'</div>';
+		}else {
+			html += '<div class="item_content" style="padding-top: 0">';
+			for (var key in data) {
+				var money_per_day = 0;
+				for (var i = 0; i < data[key].length; i++) {
+					money_per_day += parseFloat(data[key][i]['commission'], 2);
+				}
+				html += '<div class="weui-cell">' +
+	        				'<div class="weui-cell__bd">' +
+	            				'<p><span class="item_date">' + key + '</span> (<span class="item_num">' + data[key].length + '</span>) 项提成</p>' +
+	        				'</div>' +
+	        				'<div class="weui-cell__ft"><span class="item_num">￥' + thousand_separator(money_per_day.toFixed(2)) + '</span></div>' +
+	    				'</div>' +
+	    				'<div class="pcds_detail_box">' + 
+			    			'<div class="pcds_detail">' + 
+								'<div class="weui-panel pcd_pet_detail">' +
+									'<div class="weui-panel__bd">' +
+										'<div class="weui-media-box weui-media-box_text">' +
+											'<table class="pcd_table">' +
+												'<tbody>' +
+													'<tr class="ird_table_head">' +
+														'<td width="40%">项目</td>' +
+														'<td width="16%">销售量</td>' +
+														'<td width="22%">销售额</td>' +
+														'<td width="22%">提成</td>' +
+													'</tr>' +
+														create_inner_tr(data[key]) +
+												'</tbody>' +
+											'</table>' +
+										'</div>' +
+									'</div>' +
+								'</div>' +
+						    '</div>' +
+					    '</div>';
+			}
+			html = '<div class="item_title">' +
+						'<span class="left">' +
+							title + 
+						'</span>' +
+						'<span class="right">' +
+							'<span class="r_title">共计</span>' +
+							'<span class="r_price">￥' + sumCommission + '</span>' +
+						'</span>' +
+					'</div>' + html;
+
+			if (isLeft) {
+				html += '<div class="click_load weui-cell_access">加载更多</div></div>';
+			}else {
+				html += '<div class="click_load"><span class="weui-loadmore__tips">无更多数据</span></div></div>';
+			}
+
+		}
+
+		$htmlBox.html(html);
+	}
+
+	function create_table(data, type) {
+		var html = '';
+		for (var key in data) {
+			var money_per_day = 0;
+			for (var i = 0; i < data[key].length; i++) {
+				money_per_day += parseFloat(data[key][i]['commission'], 2);
+			}
+			html += '<div class="weui-cell">' +
+        				'<div class="weui-cell__bd">' +
+            				'<p><span class="item_date">' + key + '</span> (<span class="item_num">' + data[key].length + '</span>) 项提成</p>' +
+        				'</div>' +
+        				'<div class="weui-cell__ft"><span class="item_num">￥' + thousand_separator(money_per_day.toFixed(2)) + '</span></div>' +
+    				'</div>' +
+    				'<div class="pcds_detail_box">' + 
+		    			'<div class="pcds_detail">' + 
+							'<div class="weui-panel pcd_pet_detail">' +
+								'<div class="weui-panel__bd">' +
+									'<div class="weui-media-box weui-media-box_text">' +
+										'<table class="pcd_table">' +
+											'<tbody>' +
+												'<tr class="ird_table_head">' +
+													'<td width="40%">项目</td>' +
+													'<td width="16%">销售量</td>' +
+													'<td width="22%">销售额</td>' +
+													'<td width="22%">提成</td>' +
+												'</tr>' +
+													create_inner_tr(data[key]) +
+											'</tbody>' +
+										'</table>' +
+									'</div>' +
+								'</div>' +
+							'</div>' +
+					    '</div>' +
+				    '</div>';
+		}
+		return html;
+	}
+
+	// type:tm(this month)/pm(previous month)/dby(the day before yesterday)/undefiend
+	function ajax_get_all_data(startTime, endTime, type) {
+		var info = {
+			begintime: startTime,
+			endtime: endTime,
+			regcode: '{$regcode}',
+			mid: '{$mid}'
+		};
+		var loading = weui.loading('加载中...', {
+		    className: 'loading'
+		});
+
+		$.ajax({
+			url: '/DoctorMyWork/ajaxChangeDate',
+			type: 'POST',
+			timeout: 15000,
+			dataType: 'JSON',
+			data: {info: info},
+			success: function(d) {
+				$('.petc_date_start').text(startTime);
+				$('.petc_date_end').text(endTime);
+				var data = JSON.parse(d);
+				console.log(data);
+				create_activity_data(data.activityDatas);
+				modify_chart_data(data);
+				create_list(data, 'sale');
+				create_list(data, 'service');
+				loading.hide();
+
+				// 更新时间快速选择按钮
+				var date_quickpick_html = '';
+				if (type === 'tm') {
+					date_quickpick_html = '' +
+						'<span>' +
+							'<button class="show_prev_month">上月</button>' +
+							'<button class="show_dby">前日</button>' +
+							'<button class="show_this_month active">本月</button>' +
+						'</span>';
+					$('.date_quickpick').html(date_quickpick_html);
+				}else if (type === 'dby') {
+					date_quickpick_html = '' +
+						'<span>' +
+							'<button class="show_prev_month">上月</button>' +
+							'<button class="show_dby active">前日</button>' +
+							'<button class="show_this_month">本月</button>' +
+						'</span>';
+					$('.date_quickpick').html(date_quickpick_html);
+				}else if (type === 'pm') {
+					date_quickpick_html = '' +
+						'<span>' +
+							'<button class="show_prev_month active">上月</button>' +
+							'<button class="show_dby">前日</button>' +
+							'<button class="show_this_month">本月</button>' +
+						'</span>';
+					$('.date_quickpick').html(date_quickpick_html);
+				}else {
+					date_quickpick_html = '' +
+						'<span>' +
+							'<button class="show_dby">前日</button>' +
+							'<button class="active">' + startTime.substring(5) + ' - ' + endTime.substring(5) + '</button>' +
+							'<button class="show_this_month">本月</button>' +
+						'</span>';
+					$('.date_quickpick').html(date_quickpick_html);
+				}
+				// 重新注册事件
+				register_quickpick(ajax_get_all_data);
+				setup_selector(ajax_get_all_data);
+
+				// 重新初始化销售提成按钮
+				sale_load_info.begintime = startTime;
+				sale_load_info.endtime = endTime;
+				sale_load_info.Page = 1;
+				is_sale_left = data.saleIsLeft;
+				sale_last_date = $('.sale_list').find('.item_date').last().text();
+				sale_loading = new Loading_work_zc('.sale_list .click_load', is_sale_left, sale_load_info, create_table, create_inner_tr, sale_url, sale_last_date, thousand_separator);
+				sale_loading.init();
+
+				// 重新初始化服务提成按钮
+				service_load_info.begintime = startTime;
+				service_load_info.endtime = endTime;
+				service_load_info.Page = 1;
+				is_service_left = data.serviceIsLeft;
+				service_last_date = $('.service_list').find('.item_date').last().text();
+				service_loading = new Loading_work_zc('.service_list .click_load', is_service_left, service_load_info, create_table, create_inner_tr, service_url, service_last_date, thousand_separator);
+				service_loading.init();
+			},
+			error: function(xhr, status) {
+				alert('error,try again');
+			}
+		});
+	}
+
+	// 进入页面后初次加载按钮
+	var sale_load_info = {
+		begintime: startTime,
+		endtime: endTime,
+		regcode: '{$regcode}',
+		mid: '{$mid}',
+		Page: 1
+	};
+	var is_sale_left = <?php echo $summary['saleIsLeft'] === true ? 'true' : 'false'; ?>;
+	var sale_url = '/DoctorMyWork/ajaxGetSaleList';
+	var sale_last_date = $('.sale_list').find('.item_date').last().text();
+	var sale_loading = new Loading_work_zc('.sale_list .click_load', is_sale_left, sale_load_info, create_table, create_inner_tr, sale_url, sale_last_date, thousand_separator);
+	sale_loading.init();
+
+	var service_load_info = {
+		begintime: startTime,
+		endtime: endTime,
+		regcode: '{$regcode}',
+		mid: '{$mid}',
+		Page: 1
+	};
+	var is_service_left = <?php echo $summary['serviceIsLeft'] === true ? 'true' : 'false'; ?>;
+	var service_url = '/DoctorMyWork/ajaxGetServiceList';
+	var service_last_date = $('.service_list').find('.item_date').last().text();
+	var service_loading = new Loading_work_zc('.service_list .click_load', is_service_left, service_load_info, create_table, create_inner_tr, service_url, service_last_date, thousand_separator);
+	service_loading.init();
 
 	// 加载环状图
 	var myChart = echarts.init(document.getElementById('chart_box'));
 
-	var series_data = [
+	var series_data_base = [
         {
-        	value:12, 
+        	value:{$summary['clincNum']}, 
         	name:'门诊',
-        	itemStyle: {
-        		normal: {
-        			color: '#EF5A4A'
-        		}
-        	}
+        	itemStyle: { normal: { color: '#EF5A4A' } }
         },
         {
-        	value:50, 
+        	value:{$summary['fosterNum']}, 
         	name:'寄养',
-        	itemStyle: {
-        		normal: {
-        			color: '#FF8C7E'
-        		}
-        	}
+        	itemStyle: { normal: { color: '#FF8C7E' } }
         },
         {
-        	value:17, 
+        	value:{$summary['beautyNum']}, 
         	name:'美容',
-        	itemStyle: {
-        		normal: {
-        			color: '#FF7D29'
-        		}
-        	}
+        	itemStyle: { normal: { color: '#FF7D29' } }
         },
         {
-        	value:13, 
+        	value:{$summary['hospitalNum']}, 
         	name:'住院',
-        	itemStyle: {
-        		normal: {
-        			color: '#FFB400'
-        		}
-        	}
+        	itemStyle: { normal: { color: '#FFB400' } }
         },
         {
-        	value:18, 
+        	value:{$summary['protectionNum']}, 
         	name:'疫苗',
-        	itemStyle: {
-        		normal: {
-        			color: '#FEDD43'
-        		}
-        	}
+        	itemStyle: { normal: { color: '#FEDD43' } }
         }
-    ].sort(function(a, b) { return b.value - a.value});
-    var tmp_data_odd = series_data.filter(function(el, index) {
-    	return !(index % 2);
-    });
-    var tmp_data_even = series_data.filter(function(el, index) {
-    	return !!(index % 2);
-    });
+    ];
+    function sort_series_data(data) {
+    	var tmp_data = clone_obj(data).sort(function(a, b) { return b.value - a.value});
+    	var tmp_data_odd = tmp_data.filter(function(el, index) {
+	    	return !(index % 2);
+	    });
+	    var tmp_data_even = tmp_data.filter(function(el, index) {
+	    	return !!(index % 2);
+	    });
+	    var new_series_data = tmp_data_odd.concat(tmp_data_even.reverse());
+	    return new_series_data;
+    }
 
-    series_data = tmp_data_odd.concat(tmp_data_even.reverse());
+    var series_data = sort_series_data(series_data_base);
 
-
-    var legend_data = [
+    var legend_data_base = [
     	{	
-    		value: 12,
+    		value: {$summary['clincNum']},
     		name: '门诊',
     		icon: 'image:///Public/images/icon_yiliao@2x.png'
     	},
     	{	
-    		value: 50,
+    		value: {$summary['fosterNum']},
     		name: '寄养',
     		icon: 'image:///Public/images/icon_jiyang@2x.png'
     	},
     	{	
-    		value: 17,
+    		value: {$summary['beautyNum']},
     		name: '美容',
     		icon: 'image:///Public/images/icon_meirong@2x.png'
     	},
     	{	
-    		value: 13,
+    		value: {$summary['hospitalNum']},
     		name: '住院',
     		icon: 'image:///Public/images/icon_zhuyuan@2x.png'
     	},
     	{	
-    		value: 18,
+    		value: {$summary['protectionNum']},
     		name: '疫苗',
     		icon: 'image:///Public/images/icon_yimiao@2x.png'
     	},
-    ].sort(function(a, b) { return b.value - a.value});
+    ];
+    var legend_data = clone_obj(legend_data_base).sort(function(a, b) { return b.value - a.value; });
 
 	var option = {
 	    legend: {
@@ -397,10 +743,10 @@ $(function() {
 	            clockwise: false,
 	            label: {
 	            	normal: {
-	            		formatter: '{c}单\n{b}'
+	            		formatter: '{c}单\\n{b}'
 	            	},
 	            	emphasis: {
-	            		formatter : '{d}%\n{b}'
+	            		formatter : '{d}%\\n{b}'
 	            	}
 	            },
 	            data: series_data,
@@ -411,5 +757,9 @@ $(function() {
 	    ]
 	};
     myChart.setOption(option);
+	
+	register_quickpick(ajax_get_all_data);
+	
+
 });
 </script>

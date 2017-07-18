@@ -1,0 +1,786 @@
+<layout name="layout/work_default" />
+<script type="text/javascript" src="/Public/javascripts/echarts.min_3.js"></script>
+
+<style type="text/css">
+	.tw_page{
+		top: 40px;
+		background-color: #f5f5f9;
+	}
+	#chart_box{
+		width: 100%;
+		height: 380px;
+	}
+	#tw_chart_client{
+		width: 100%;
+		height: 400px;
+	}
+	.page_navbar_fixed{
+		box-shadow: 0 2px 5px 0px rgba(0,0,0,.2);
+	}
+</style>
+
+<div class="page_fixed">
+	<div class="page_header">
+		<a class="page_header_left will_redirect" href="javascript:history.back();">返回</a>
+		{$summary['hosname']}
+		<a class="page_header_right" href="#"></a>
+	</div>
+
+	<div class="weui-panel petc_selector petc_selector_fixed">
+		<div class="weui-panel__bd" style="padding-right: 15px;">
+			<p style="text-align: center;"><span class="petc_date petc_date_start">{$begintime}</span>&nbsp;&nbsp;&nbsp;至&nbsp;&nbsp;&nbsp;<span class="petc_date petc_date_end">{$endtime}</span></p>
+		</div>
+	</div>
+	<div class="page_navbar page_navbar_fixed">
+		<div class="navbar_item active">医院营业</div>
+		<div class="navbar_item">库存统计</div>
+		<div class="navbar_item">医院员工</div>
+		<div class="navbar_item">顾客统计</div>
+	</div>
+</div>
+
+<div class="tw_page page">
+	<div class="summary_info">
+		<table>
+			<tbody>
+				<tr >
+					<td width="30%">顾客 (人)</td>
+					<td width="40%">营业额 (元)</td>
+					<td width="30%">收银 (元)</td>
+				</tr>
+				<tr>
+					<td style="font-size: 15px;" class="client_num">{$summary['consumercount']}</td>
+					<td style="font-size: 23px;" class="bussinesscash"><?php echo number_format($summary['bussinesscash'], 2) ?></td>
+					<td style="font-size: 15px;" class="sumcash"><?php echo number_format($summary['sumcash'], 2) ?></td>
+				</tr>
+			</tbody>
+		</table>
+		<div class="date_quickpick">
+			<span>
+				<button class="show_prev_month">上月</button>
+				<button class="active show_dby">前日</button>
+				<button class="show_this_month">本月</button>
+			</span>
+		</div>
+	</div>
+
+	<div class="weui-panel petc_selector petc_selector_position">
+		<div class="weui-panel__bd" style="padding-right: 15px;">
+			<p style="text-align: center;"><span class="petc_date petc_date_start">{$begintime}</span>&nbsp;&nbsp;&nbsp;至&nbsp;&nbsp;&nbsp;<span class="petc_date petc_date_end">{$endtime}</span></p>
+		</div>
+	</div>
+
+	<div class="page_navbar">
+		<div class="navbar_item active">医院营业</div>
+		<div class="navbar_item">库存统计</div>
+		<div class="navbar_item">医院员工</div>
+		<div class="navbar_item">顾客统计</div>
+	</div>
+	<?php
+		$total_activity = 0;
+		for ($i = 0; $i < count($summary['activityRes']); $i++) {
+			$total_activity += $summary['activityRes'][$i]['summoney'];
+		}
+	?>
+	<!-- nav 1 -->
+	<div class="page_navcontent">
+		<div class="page_item">
+			<div class="item_title">
+				<span class="left">
+					营业额占比
+				</span>
+				<span class="right">
+					<span class="r_title">共计</span>
+					<span class="r_price rp_bussinesscash">￥<?php echo number_format($total_activity, 2); ?></span>
+				</span>
+			</div>
+			<div class="item_content activity_content">
+				<volist name="summary['activityRes']" id="vo">
+					<div class="percent_bar">
+						<div class="title"><span class="left">{$vo['activitytype'] == 0 ? '挂号' : 
+							($vo['activitytype'] == 1 ? '处方' : 
+							($vo['activitytype'] == 2 ? '检验' : 
+							($vo['activitytype'] == 3 ? '处置' : 
+							($vo['activitytype'] == 4 ? '手术' : 
+							($vo['activitytype'] == 5 ? '住院' : 
+							($vo['activitytype'] == 6 ? '疫苗驱虫' : 
+							($vo['activitytype'] == 7 ? '美容' : 
+							($vo['activitytype'] == 8 ? '商品' : 
+							($vo['activitytype'] == 9 ? '寄养' : 
+							($vo['activitytype'] == 10 ? '影像检验' : 
+							($vo['activitytype'] == 99 ? '笼位费' : 
+							($vo['activitytype'] == 100 ? '次卡充值' : '其他'))))))))))))}</span><span class="right">¥<?php echo number_format($vo['summoney'], 2); ?></span></div>
+						<div class="bar">
+							<div class="innerbar"><div class="num"><?php echo round($vo['summoney']/$total_activity, 2)*100; ?>%</div></div>
+						</div>
+					</div>
+				</volist>
+				<if condition="count($summary['activityRes']) eq 0">
+					<span class="weui-loadmore__tips" style="margin: 15px 0 10px;">暂无数据</span>
+				</if>
+			</div>
+		</div>
+		<div class="page_item">
+			<div class="item_title">
+				<span class="left">
+					收银台汇总<span style="font-size: 12px;"> (元) </span>
+				</span>
+			</div>
+			<div class="item_content" style="padding-top: 0">
+				<div class="checkout_summary">
+					<div class="cs_title"><span style="font-weight: normal;padding-left: 15px">收银台汇总</span><span style="font-size: 12px;padding-right: 15px;float: right;">不含医院运营&库存成本</span></div>
+					<div class="cs_icon">￥</div>
+					<div class="cs_content">
+						<p>＋<span class="cs_income"><?php echo number_format($summary['income'], 2); ?></span>&nbsp;&nbsp;&nbsp;总收入</p>
+						<p><span class="cs_expense"><?php echo number_format($summary['expense'], 2); ?></span>&nbsp;&nbsp;&nbsp;总支出</p>
+						<p><span style="font-size: 18px;font-weight: normal;" class="cs_sumcash"><?php echo number_format($summary['sumcash'], 2); ?></span>&nbsp;&nbsp;&nbsp;合<i style="display: inline-block;width: 1em"></i>计</p>
+					</div>
+				</div>
+				<div id="chart_box"></div>
+			</div><!-- item_content end -->
+		</div>
+	</div>
+	
+	<!-- nav 2 -->
+	<div class="page_navcontent" style="display: none;">
+		<div class="page_item">
+			<div class="item_title">
+				<span class="left">
+					热卖商品排行
+				</span>
+			</div>
+			<div class="item_content hot_list" style="padding-top: 0">
+
+				<div class="weui-panel pcd_pet_detail" style="background-color: #fff">
+					<div class="weui-panel__bd">
+						<div class="weui-media-box weui-media-box_text">
+							<table class="pcd_table tw_table">
+								<thead>
+									<tr class="ird_table_head">
+										<td width="10%">排名</td>
+										<td width="40%">名称</td>
+										<td width="20%">数量</td>
+										<td width="30%">金额(元）</td>
+									</tr>
+								</thead>
+								<tbody class="hot_tbody">
+									<volist name="summary['hotcommodityRes']" id="vo">
+										<tr>
+											<td>{$key + 1}</td>
+											<td>{$vo['name']}</td>
+											<td><?php echo number_format($vo['sumquantity'], 0); ?></td>
+											<td><?php echo number_format($vo['summoney'], 2); ?></td>
+										</tr>
+									</volist>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+
+				<div class="hot_status">
+					<if condition="count($summary['hotcommodityRes']) neq 0">
+						<if condition="$summary['hotisleft'] eq false">
+							<div class="click_load">
+								<span class="weui-loadmore__tips">无更多数据</span>
+							</div>
+						<else />
+							<div class="click_load weui-cell_access">加载更多</div>
+						</if>
+					<else />
+						<span class="weui-loadmore__tips" style="margin: 15px 0 10px;">暂无数据</span>
+					</if>
+				</div>
+			</div>
+		</div>
+		<div class="page_item">
+			<div class="item_title">
+				<span class="left">
+					采购入库明细
+				</span>
+			</div>
+			<div class="item_content pchs_list" style="padding-top: 0">
+
+				<div class="weui-panel pcd_pet_detail" style="background-color: #fff">
+					<div class="weui-panel__bd">
+						<div class="weui-media-box weui-media-box_text">
+							<table class="pcd_table tw_table">
+								<thead>
+									<tr class="ird_table_head">
+										<td width="10%">序号</td>
+										<td width="40%">名称</td>
+										<td width="20%">入库数</td>
+										<td width="30%">金额(元）</td>
+									</tr>
+								</thead>
+								<tbody class="pchs_tbody">
+									<volist name="summary['purchasedetailRes']" id="vo">
+										<tr>
+											<td>{$key + 1}</td>
+											<td>{$vo['commodityname']}</td>
+											<td><?php echo number_format($vo['sumquantity'], 0); ?></td>
+											<td><?php echo number_format($vo['summoney'], 2); ?></td>
+										</tr>
+									</volist>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+				
+				<div class="pchs_status">
+					<if condition="count($summary['purchasedetailRes']) neq 0">
+						<if condition="$summary['purisleft'] eq false">
+							<div class="click_load">
+								<span class="weui-loadmore__tips">无更多数据</span>
+							</div>
+						<else />
+							<div class="click_load weui-cell_access">加载更多</div>
+						</if>
+					<else />
+						<span class="weui-loadmore__tips" style="margin: 15px 0 10px;">暂无数据</span>
+					</if>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- nav 3 -->
+	<div class="page_navcontent" style="display: none;">
+		<div class="page_item" style="padding: 0;padding-top: 10px;overflow: auto;">
+			<volist name="summary['employeeRes']" id="vo">
+				<div class="hospital_employee">
+					<div class="he_icon"><div class="he_num">{$key + 1}</div><img src="/Public/images/touxiang_yuangong@2x.png"></div>
+					<div class="he_name">{$vo['name']}</div>
+					<div class="he_job">{$vo['rolename']}</div>
+				</div>
+			</volist>
+		</div>
+	</div>
+	
+	<!-- nav 4 -->
+	<div class="page_navcontent" style="display: none;">
+		<div class="page_item">
+			<div class="item_title">
+				<span class="left">
+					顾客来源
+				</span>
+				<span class="right">
+					<span class="r_title">共计顾客</span>
+					<span class="r_price" style="color: #FF6565;">{$summary['consumercount']}人</span>
+				</span>
+			</div>
+			<div class="item_content client_content">
+				<volist name="summary['consumerknowRes']" id="vo">
+					<div class="percent_bar percent_bar_red">
+						<div class="title"><span class="left">美团</span><span class="right">50人</span></div>
+						<div class="bar">
+							<div class="innerbar"><div class="num">90%</div></div>
+						</div>
+					</div>
+				</volist>
+				<if condition="count($summary['consumerknowRes']) eq 0">
+					<span class="weui-loadmore__tips" style="margin: 15px 0 10px;">暂无数据</span>
+				</if>
+			</div>
+		</div>
+		<div class="page_item">
+			<div class="item_title">
+				<span class="left">
+					顾客分布
+				</span>
+				<span class="right">
+					<span class="r_title">共计区域</span>
+					<span class="r_price" style="color: #4990E2;"><?php echo count($summary['consumerregionRes']); ?></span>
+				</span>
+			</div>
+			<div class="item_content">
+				<div id="tw_chart_client"></div>
+			</div>
+		</div>
+		
+	</div>
+	<p class="bottom_msg">到底啦~</p>
+</div>
+
+<script type="text/javascript" src="/Public/javascripts/selector_work_zc.js?t={:time()}"></script>
+<script type="text/javascript" src="/Public/javascripts/utils_zc.js?t={:time()}"></script>
+<script type="text/javascript" src="/Public/javascripts/loading_business_zc.js?t={:time()}"></script>
+<script type="text/javascript">
+	// 添加标签页hash
+	if (!window.location.hash) {
+		history.replaceState(null, null, '#p=0');
+	}
+
+	// 横向柱状图动画
+	window.onload = function() {
+		show_percent_bar(0);
+		if (window.location.href.indexOf('starttime') > -1) {
+			$(window).trigger('popstate');
+		}
+	};
+
+	function show_percent_bar(index) {
+		$innerbar = $('.page_navcontent').eq(index).find('.innerbar');
+
+		$innerbar.forEach(function(ele, idx){
+			var width = $(ele).find('.num').text();
+			$(ele).css('width', width);
+
+			setTimeout(function() {
+				var bar_width = $(ele).width();
+				var num_width = $(ele).find('.num').width();
+				if (bar_width < num_width) {
+					$(ele).find('.num').css('float', 'left');
+				}
+				$(ele).find('.num').css('visibility', 'visible');
+			}, 500);
+		});
+	}
+$(function() {
+	// selector_work_zc.js-加载选择器
+	var startTime = "{$begintime}";
+	var endTime = "{$endtime}";
+	setup_selector(ajax_get_all_data);
+
+	// 改变时间后拉取数据
+	// type:tm(this month)/pm(previous month)/dby(the day before yesterday)/undefiend
+	// type:用于标识快速选择时间
+	function ajax_get_all_data(startTime, endTime, type) {
+		var info = {
+			begintime: startTime,
+			endtime: endTime,
+			regcode: '{$regcode}',
+		};
+		var loading = weui.loading('加载中...', {
+		    className: 'loading'
+		});
+
+		$.ajax({
+			url: '/DoctorBusiness/ajaxChangeDate',
+			type: 'POST',
+			timeout: 15000,
+			dataType: 'JSON',
+			data: {info: info},
+			success: function(d) {
+				$('.petc_date_start').text(startTime);
+				$('.petc_date_end').text(endTime);
+				var data = JSON.parse(d);
+				console.log(data);
+				loading.hide();
+
+				// 拉取数据成功，开始更改数据
+				modify_money(data);
+				create_activity_bar(data.activityRes, data.bussinesscash);
+				create_inner_tr(data, 1);
+				create_inner_tr(data, 2);
+				create_client_bar(data.consumerknowRes, +$('.client_num').text());
+				
+
+				// 根据type更新时间快速选择按钮
+				var date_quickpick_html = '';
+				if (type === 'tm') {
+					date_quickpick_html = '' +
+						'<span>' +
+							'<button class="show_prev_month">上月</button>' +
+							'<button class="show_dby">前日</button>' +
+							'<button class="show_this_month active">本月</button>' +
+						'</span>';
+					$('.date_quickpick').html(date_quickpick_html);
+				}else if (type === 'dby') {
+					date_quickpick_html = '' +
+						'<span>' +
+							'<button class="show_prev_month">上月</button>' +
+							'<button class="show_dby active">前日</button>' +
+							'<button class="show_this_month">本月</button>' +
+						'</span>';
+					$('.date_quickpick').html(date_quickpick_html);
+				}else if (type === 'pm') {
+					date_quickpick_html = '' +
+						'<span>' +
+							'<button class="show_prev_month active">上月</button>' +
+							'<button class="show_dby">前日</button>' +
+							'<button class="show_this_month">本月</button>' +
+						'</span>';
+					$('.date_quickpick').html(date_quickpick_html);
+				}else {
+					date_quickpick_html = '' +
+						'<span>' +
+							'<button class="show_dby">前日</button>' +
+							'<button class="active">' + startTime.substring(5) + ' - ' + endTime.substring(5) + '</button>' +
+							'<button class="show_this_month">本月</button>' +
+						'</span>';
+					$('.date_quickpick').html(date_quickpick_html);
+				}
+				// 重新注册选择时间的事件
+				register_quickpick(ajax_get_all_data);
+				setup_selector(ajax_get_all_data);
+
+				// 重新初始化热卖按钮
+				hot_load_info.begintime = startTime;
+				hot_load_info.endtime = endTime;
+				hot_load_info.Page = 1;
+				is_hot_left = data.hotisleft;
+				hot_loading = new Loading_business_zc('.hot_list .click_load', is_hot_left, hot_load_info, 'hot', hot_url, thousand_separator, pagenum);
+				hot_loading.init();
+
+				// 重新初始化采购按钮
+				pchs_load_info.begintime = startTime;
+				pchs_load_info.endtime = endTime;
+				pchs_load_info.Page = 1;
+				is_pchs_left = data.purisleft;
+				pchs_loading = new Loading_business_zc('.pchs_list .click_load', is_pchs_left, pchs_load_info, 'pchs', pchs_url, thousand_separator, pagenum);
+				pchs_loading.init();
+			},
+			error: function(xhr, status) {
+				alert('error,try again');
+			}
+		});
+	}
+	// 快速选择时间（用于首次加载）
+	register_quickpick(ajax_get_all_data);
+
+	// 更改单独的展示数据
+	function modify_money(data) {
+		$('.bussinesscash').text(thousand_separator((+data.bussinesscash).toFixed(2)));
+		$('.sumcash').text(thousand_separator((+data.sumcash).toFixed(2)));
+		$('.rp_bussinesscash').text('￥' + thousand_separator((+data.bussinesscash).toFixed(2)));
+
+		$('.cs_income').text(thousand_separator((+data.income).toFixed(2)));
+		$('.cs_expense').text(thousand_separator((+data.expense).toFixed(2)));
+		$('.cs_sumcash').text(thousand_separator((+data.sumcash).toFixed(2)));
+
+		data1 = filter_turnover(data.turnoverRes, 0);
+		option.series[0].data = data1;
+		data2 = filter_turnover(data.turnoverRes, 1);
+		option.series[1].data = data2;
+		twChart.setOption(option);
+	}
+
+	// 根据ajax返回的数据创建营业额占比数据
+	function create_activity_bar(data, sum) {
+		var html = "";
+		if (!data.length) {
+			html = '<span class="weui-loadmore__tips" style="margin: 15px 0 10px;">暂无数据</span>';
+		}else {
+			for (var i = 0; i < data.length; i++) {
+				html += '<div class="percent_bar">' +
+							'<div class="title">' +
+								'<span class="left">' +
+									(data[i]['activitytype'] == 0 ? '挂号' : 
+									(data[i]['activitytype'] == 1 ? '处方' : 
+									(data[i]['activitytype'] == 2 ? '检验' : 
+									(data[i]['activitytype'] == 3 ? '处置' : 
+									(data[i]['activitytype'] == 4 ? '手术' : 
+									(data[i]['activitytype'] == 5 ? '住院' : 
+									(data[i]['activitytype'] == 6 ? '疫苗驱虫' : 
+									(data[i]['activitytype'] == 7 ? '美容' : 
+									(data[i]['activitytype'] == 8 ? '商品' : 
+									(data[i]['activitytype'] == 9 ? '寄养' : 
+									(data[i]['activitytype'] == 10 ? '影像检验' : 
+									(data[i]['activitytype'] == 99 ? '笼位费' : 
+									(data[i]['activitytype'] == 100 ? '次卡充值' : '其他'))))))))))))) +
+								'</span>' +
+								'<span class="right">¥' + thousand_separator(parseFloat(data[i].summoney, 2).toFixed(2)) + '</span>' +
+							'</div>' +
+							'<div class="bar">' +
+								'<div class="innerbar"><div class="num">' + (parseFloat(data[i].summoney/sum, 2)*100).toFixed(0) + '%</div></div>' +
+							'</div>' +
+						'</div>';
+			}
+		}
+		
+		$('.activity_content').html(html);
+		setTimeout(function() {
+			show_percent_bar(0);
+		}, 100);
+	}
+
+	// 根据ajax返回的数据创建顾客来源数据
+	function create_client_bar(data, sum) {
+		var html = "";
+		if (!data.length) {
+			html = '<span class="weui-loadmore__tips" style="margin: 15px 0 10px;">暂无数据</span>';
+		}else {
+			for (var i = 0; i < data.length; i++) {
+				html += '<div class="percent_bar percent_bar_red">' +
+							'<div class="title">' +
+								'<span class="left">' + data[i].discription + '</span>' +
+								'<span class="right">' + thousand_separator(parseInt(data[i].sourcecount)) + '人</span>' +
+							'</div>' +
+							'<div class="bar">' +
+								'<div class="innerbar"><div class="num">' + (parseFloat(data[i].sourcecount/sum, 2)*100).toFixed(0) + '%</div></div>' +
+							'</div>' +
+						'</div>';
+			}
+		}
+
+		$('.client_content').html(html);
+		setTimeout(function() {
+			show_percent_bar(3);
+		}, 100);
+	}
+
+	// 创建热卖和采购数据
+	function create_inner_tr(all_data, type) {
+		var data = all_data.hotcommodityRes;
+		var title = 'name';
+		var $ele = $('.hot_tbody');
+		var $status = $('.hot_status');
+		var isleft = 'hotisleft';
+		if (type === 2) {
+			data = all_data.purchasedetailRes;
+			title = 'commodityname';
+			$ele = $('.pchs_tbody');
+			$status = $('.pchs_status');
+			isleft = 'purisleft';
+		}
+		var html = '';
+		var status = '';
+
+		if (!data.length) {
+			status = '<span class="weui-loadmore__tips" style="margin: 15px 0 10px;">暂无数据</span>';
+		}else {
+			for (var i = 0; i < data.length; i++) {
+				html += '<tr>' +
+							'<td>' + (i + 1) + '</td>' +
+							'<td>' + data[i][title] + '</td>' +
+							'<td>' + (+data[i].sumquantity).toFixed(0) + '</td>' +
+							'<td>' + thousand_separator((+data[i].summoney).toFixed(2)) + '</td>' +
+						'</tr>';
+			}
+
+			if (all_data[isleft]) {
+				status = '<div class="click_load weui-cell_access">加载更多</div>';
+			}else {
+				status = '<div class="click_load"><span class="weui-loadmore__tips">无更多数据</span></div>';
+			}
+		}
+
+		$ele.html(html);
+		$status.html(status);
+	}
+
+	// 点击返回实现切换标签页功能
+	$(window).on('popstate', function(event) {
+		var idx = + (window.location.hash && window.location.hash.substr(-1));
+		$('.page_navbar').eq(0).find('.navbar_item').eq(idx).trigger('click');
+	});
+
+	$('.navbar_item').click(function(event) {
+		var page_idx = + (window.location.hash && window.location.hash.substr(-1));
+		var idx = $(this).index();
+		if (page_idx !== idx) {
+			history.pushState(null, null, '#p='+idx);
+		}
+		$('.page_navbar').forEach(function(ele, idx2) {
+			$(ele).find('.navbar_item').eq(idx).addClass('active').siblings('.navbar_item').removeClass('active');
+		});
+		$('.page_navcontent').eq(idx).show().siblings('.page_navcontent').hide();
+		$('.page').scrollTop(0);
+
+		if (idx === 0) {
+			show_percent_bar(0);
+		}
+
+		if (idx === 3) {
+			show_percent_bar(3);
+			var twChartClient = echarts.init(document.getElementById('tw_chart_client'));
+			twChartClient.setOption(option_client);
+		}
+
+	});
+
+	// 加载第一屏柱状图
+	var twChart = echarts.init(document.getElementById('chart_box'));
+	var xAxisData = ['会员卡', '次卡', '押金', '商品服务'];
+	var data1 = [];
+	var data2 = [];
+
+	var data = {:json_encode($summary['turnoverRes'])};
+
+	function filter_turnover(data, mod) {
+		var new_arr = data.filter(function(value, index) {
+			return index % 2 === mod;
+		});
+
+		return new_arr.map(function(value, index) {
+			return value.summoney;
+		});
+	}
+	data1 = filter_turnover(data, 0);
+	data2 = filter_turnover(data, 1);
+
+	option = {
+	    xAxis: {
+	    	offset: 10,
+	        data: xAxisData,
+	        name: '',
+	        silent: false,
+	        splitLine: {show: false},
+	        splitArea: {show: false},
+	        axisTick: {show: false},
+	        axisLine: {
+	        	lineStyle: {
+	        		width: 2,
+	        		color: '#9b9b9b'
+	        	}
+	        }
+	    },
+	    yAxis: {
+	    	name: '收入/退款',
+	    	nameGap: 10,
+	        inverse: false,
+	        splitLine: {show: false},
+	        splitArea: {show: false},
+	        axisTick: {show: false},
+	        axisLabel: {show: false},
+	        axisLine: {
+	        	lineStyle: {
+	        		width: 2,
+	        		color: '#9b9b9b'
+	        	}
+	        }
+	    },
+	    grid: {
+	        left: 30
+	    },
+	    series: [
+	        {
+	            name: 'bar',
+	            type: 'bar',
+	            stack: 'one',
+	            barWidth: '18px',
+	            label: {
+	            	normal: {
+	            		show: true,
+	            		position: 'top'
+	            	}
+	            },
+	            itemStyle: {
+				    normal: {
+				    	color: '#1585F9'
+				    },
+				    emphasis: {
+				        barBorderWidth: 1,
+				        shadowBlur: 10,
+				        shadowOffsetX: 0,
+				        shadowOffsetY: 0,
+				        shadowColor: 'rgba(0,0,0,0.5)'
+				    }
+				},
+	            data: data1
+	        },
+	        {
+	            name: 'bar2',
+	            type: 'bar',
+	            stack: 'one',
+	            barWidth: '18px',
+	            label: {
+	            	normal: {
+	            		show: true,
+	            		position: 'bottom'
+	            	}
+	            },
+	            itemStyle: {
+				    normal: {
+				    	color: '#FF8C7E'
+				    },
+				    emphasis: {
+				        barBorderWidth: 1,
+				        shadowBlur: 10,
+				        shadowOffsetX: 0,
+				        shadowOffsetY: 0,
+				        shadowColor: 'rgba(0,0,0,0.5)'
+				    }
+				},
+	            data: data2
+	        }
+	    ]
+	};
+
+	twChart.setOption(option);
+
+	// 第四屏气泡图
+	var colors = ['#C6DBEF', '#A1D99B', '#FFB06C', '#9E9AC9', '#6BAED6', '#9ECAE1', '#C7E9C0', '#FD8C3C', '#DADAEB', '#BCBDDC'];
+	var option_client = {
+	    animationDuration: 3000,
+	    animationEasingUpdate: 'quinticInOut',
+	    series: [{
+	        type: 'graph',
+	        layout: 'force',
+
+	        force: {
+	            repulsion: 100
+	        },
+	        data: [],
+	        left: 'center',
+	        focusNodeAdjacency: true,
+	        roam: false,
+	        label: {
+	            normal: {
+	                show: true,
+	                position: 'inside',
+	                textStyle: {
+	                	color: '#5d5d5d',
+	                	fontWeight: 'lighter'
+	                }
+	            }
+	        },
+	        lineStyle: {
+	            normal: {
+	            	opacity: 0
+	            }
+	        }
+	    }]
+	};
+
+	var client_data = {:json_encode($summary['consumerregionRes'])};
+
+	function create_client_data(data) {
+		if (!data.length) {
+			return false;
+		}
+		data.forEach(function(ele, idx) {
+			var item = {
+				"name": ele.address + '\n' + ele.consumercount,
+				"symbolSize": 10 * (10 - idx),
+				"draggable": "false",
+				"value": + ele.consumercount,
+				"itemStyle": {
+					normal: {
+						color: colors[idx]
+					}
+				}
+			};
+			option_client.series[0].data.push(item);
+		});
+	}
+	create_client_data(client_data);
+
+	// 进入页面后初次加载按钮
+	var pagenum = '{$pagenum}' || 10;
+	var hot_load_info = {
+		begintime: startTime,
+		endtime: endTime,
+		regcode: '{$regcode}',
+		Page: 1
+	};
+	var is_hot_left = <?php echo $summary['hotisleft'] === true ? 'true' : 'false'; ?>;
+	var hot_url = '/DoctorBusiness/ajaxGetHotCommodityList';
+	var hot_loading = new Loading_business_zc('.hot_list .click_load', is_hot_left, hot_load_info, 'hot', hot_url, thousand_separator, pagenum);
+	hot_loading.init();
+
+	var pchs_load_info = {
+		begintime: startTime,
+		endtime: endTime,
+		regcode: '{$regcode}',
+		Page: 1
+	};
+	var is_pchs_left = <?php echo $summary['purisleft'] === true ? 'true' : 'false'; ?>;
+	var pchs_url = '/DoctorBusiness/ajaxGetPurchaseDetailList';
+	var pchs_loading = new Loading_business_zc('.pchs_list .click_load', is_pchs_left, pchs_load_info, 'pchs', pchs_url, thousand_separator, pagenum);
+	pchs_loading.init();
+
+});
+</script>
